@@ -20,12 +20,11 @@ public:
     Vonat(const Vonat& other);
     Vonat(Kocsi* kocsik, Utvonal utvonal, Jegy* jegyek);
     Vonat::Vonat(size_t azonosito, size_t kocsik_sz, Kocsi* kocsik_ptr, Utvonal utv, size_t jegyek_sz, Jegy* jegyek_ptr);
-    void addJegy(size_t kocsi_szam, size_t hely_szam);
     size_t getAzonosito() const;
     Utvonal getUtvonal() const;
     void setUtvonal(const Utvonal& utvonal);
     void addKocsi(size_t helyek_szama, size_t kocsi_szam);
-    void addTicket(size_t kocsi_index, size_t helyszam);
+    void addJegy(size_t kocsi_szam, size_t hely_szam);
     ~Vonat();
 };
 
