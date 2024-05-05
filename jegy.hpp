@@ -1,82 +1,154 @@
 #ifndef JEGY_HPP
 #define JEGY_HPP
 
-// red-flag -- start
 #include <cstring>
 #include <cstddef>
-// red-flag -- end
+#include <iostream>
 
 #include "allomas.hpp"
 
+#include "memtrace.h"
+
+// A Jegy osztaly reprezentalja a vonatjegyeket.
+// Tartalmazza a jegy azonositojat, a helyszamot, a kocsi szamat, a vonat szamat,
+// az indulo es a cel allomast, valamint az arat.
 class Jegy
 {
 protected:
-  size_t jegy_azonosito;
-  size_t helyszam;
-  size_t kocsi_szam;
-  size_t vonat_szam;
-  Allomas *indulo;
-  Allomas *cel;
-  double kedvezmeny;
-  int ar;
-  int getAr();
-  
+  size_t jegy_azonosito;          // A jegy azonositoja.
+  size_t helyszam;                // A jegyhez tartozo helyszam.
+  size_t kocsi_szam;              // A kocsi azonositoja, ahol a hely talalhato.
+  size_t vonat_szam;              // A vonat azonositoja, amelyre a jegy szol.
+  Allomas *indulo;                // Az indulasi allomas.
+  Allomas *cel;                   // A celallomas.
+  int ar;                         // A jegy ara.
+  virtual int getAr(double pred); // A jegy arat szamito fuggveny.
 public:
+  // Az osztaly alapertelmezett konstruktora.
   Jegy();
+
+  // Egyedi konstruktor.
+  // @param azonosito - a jegy azonositoja
+  // @param hely - a helyszam
+  // @param kocsi - a kocsi azonositoja
+  // @param vonat - a vonat azonositoja
+  // @param indulo - az indulasi allomas
+  // @param cel - a celallomas
   Jegy(size_t azonosito, size_t hely, size_t kocsi, size_t vonat, Allomas *indulo, Allomas *cel);
+
+  // Egyedi konstruktor.
+  // @param azonosito - a jegy azonositoja
+  // @param hely - a helyszam
+  // @param kocsi - a kocsi azonositoja
+  // @param vonat - a vonat azonositoja
+  // @param indulo - az indulasi allomas
+  // @param cel - a celallomas
+  // @param pred - a kedvezmeny elorejelezett erteke
+  Jegy(size_t azonosito, size_t hely, size_t kocsi, size_t vonat, Allomas *indulo, Allomas *cel, int pred);
+
+  // Masolo konstruktor.
+  // @param other - masolni kivant Jegy objektum
   Jegy(const Jegy &other);
+
+  // Masolo ertekadas operator.
+  // @param other - masolni kivant Jegy objektum
+  // @return A masolt Jegy objektum referenciaja
   Jegy &operator=(const Jegy &other);
 
-  virtual void kiir() const = 0;
-  virtual bool operator==(const Jegy &other) const;
-  virtual bool operator!=(const Jegy &other) const;
+  // Egyenloseg operator.
+  // @param other - a masik Jegy objektum, amivel osszehasonlitjuk
+  // @return true, ha a ket Jegy azonos, false egyebkent
+  bool operator==(const Jegy &other) const;
+
+  // Nem egyenloseg operator.
+  // @param other - a masik Jegy objektum, amivel osszehasonlitjuk
+  // @return true, ha a ket Jegy nem azonos, false egyebkent
+  bool operator!=(const Jegy &other) const;
+
+  // Kiiratas operator.
+  // @param os - a kimeneti stream, amire kiirjuk a Jegy adatait
+  virtual void kiir(std::ostream &os) const;
+
+  // Az osztaly virtualis destruktora.
   virtual ~Jegy() {}
 };
 
-class ElsoOsztalyJegy : public Jegy
+// A KedvezmenyesJegy osztaly a Jegy osztaly leszarmazottja, es reprezentalja a kedvezmenyes jegyeket.
+// Tartalmazza a tipust (pl. diak, nyugdijas) es a kedvezmeny merteket.
+class KedvezmenyesJegy : public Jegy
 {
-  char *tipus;
+  char *tipus;        // A kedvezmenyes tipus neve.
+  double kedvezmeny;  // A kedvezmeny merteket szazalekban kifejezo ertek.
 public:
-  ElsoOsztalyJegy();
-  ElsoOsztalyJegy(const ElsoOsztalyJegy &other);
-  ElsoOsztalyJegy(size_t azonosito, size_t hely, size_t kocsi, size_t vonat, Allomas *indulo, Allomas *cel, double kedvezmeny);
+  // Az osztaly alapertelmezett konstruktora.
+  KedvezmenyesJegy();
 
-  ~ElsoOsztalyJegy();
+  // Masolo konstruktor.
+  // @param other - masolni kivant KedvezmenyesJegy objektum
+  KedvezmenyesJegy(const KedvezmenyesJegy &other);
 
-  void kiir() const override;
+  // Egyedi konstruktor.
+  // @param azonosito - a jegy azonositoja
+  // @param hely - a helyszam
+  // @param kocsi - a kocsi azonositoja
+  // @param vonat - a vonat azonositoja
+  // @param indulo - az indulasi allomas
+  // @param cel - a celallomas
+  // @param kedvezmeny - a kedvezmeny merteket szazalekban kifejezo ertek
+  // @param tipus_nev - a kedvezmenyes tipus neve
+  KedvezmenyesJegy(size_t azonosito, size_t hely, size_t kocsi, size_t vonat, Allomas *indulo, Allomas *cel, double kedvezmeny, char *tipus_nev);
+
+  // Az osztaly destruktora.
+  ~KedvezmenyesJegy();
+
+  // Kiiratas operator.
+  // @param os - a kimeneti stream, amire kiirjuk a KedvezmenyesJegy adatait
+  void kiir(std::ostream &os) const;
 };
 
-class MasodOsztalyJegy : public Jegy
+// A FelarasJegy osztaly a Jegy osztaly leszarmazottja, es reprezentalja a felaras jegyeket.
+// Tartalmazza a tipust es a felart.
+class FelarasJegy : public Jegy
 {
-  char *tipus;
+  char *tipus;    // A felaras tipus neve.
+  double felar;   // A felar erteket.
 public:
-  MasodOsztalyJegy();
-  MasodOsztalyJegy(const MasodOsztalyJegy &other);
-  MasodOsztalyJegy(size_t azonosito, size_t hely, size_t kocsi, size_t vonat, Allomas *indulo, Allomas *cel, double kedvezmeny);
+  // Az osztaly alapertelmezett konstruktora.
+  FelarasJegy();
 
-  ~MasodOsztalyJegy();
+  // Masolo konstruktor.
+  // @param other - masolni kivant FelarasJegy objektum
+  FelarasJegy(const FelarasJegy &other);
 
-  void kiir() const override;
-};
+  // Egyedi konstruktor.
+  // @param azonosito - a jegy azonositoja
+  // @param hely - a helyszam
+  // @param kocsi - a kocsi azonositoja
+  // @param vonat - a vonat azonositoja
+  // @param indulo - az indulasi allomas
+  // @param cel - a celallomas
+  // @param felar - a felar erteket
+  // @param tipus_nev - a felaras tipus neve
+  FelarasJegy(size_t azonosito, size_t hely, size_t kocsi, size_t vonat, Allomas *indulo, Allomas *cel, double felar, char *tipus_nev);
 
-class DiakJegy : public Jegy
-{
-  char *tipus;
+  // Az osztaly destruktora.
+  ~FelarasJegy();
 
-public:
-  DiakJegy();
-  DiakJegy(const Jegy &other);
-  ~DiakJegy();
-};
+  // Operátor túlterhelés: Streambe írás a Jegy osztályhoz.
+  // @param os - referencia a kimeneti streamre
+  // @param jegy - referencia a kiírandó Jegy objektumra
+  // @return A kimeneti stream referenciaja
+  friend std::ostream &operator<<(std::ostream &os, const Jegy &jegy);
 
-class NyugdijasJegy : public Jegy
-{
-  char *tipus;
+  // Operátor túlterhelés: Streamből olvasás a Jegy osztályhoz.
+  // @param is - referencia a bemeneti streamre
+  // @param jegy - referencia a beolvasandó Jegy objektumra
+  // @return A bemeneti stream referenciaja
+  friend std::istream &operator>>(std::istream &is, Jegy &jegy);
 
-public:
-  NyugdijasJegy();
-  NyugdijasJegy(const Jegy &other);
-  ~NyugdijasJegy();
+  // Kiiratas operator.
+  // @param os - a kimeneti stream, amire kiirjuk a FelarasJegy adatait
+  void kiir(std::ostream &os) const;
 };
 
 #endif // JEGY_HPP

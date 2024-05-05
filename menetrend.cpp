@@ -34,7 +34,7 @@ Vonat Menetrend::getVonat(size_t index = 0)
 }
 
 void Menetrend::kiir() {
-  // menetrend kiirasa a vonatok kiiro fuggvenyet / parametereit felhasznalva
+  
 };
 
 Menetrend::~Menetrend()

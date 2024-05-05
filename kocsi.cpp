@@ -12,10 +12,7 @@ void Kocsi::szek_foglal() {
     if (foglalt_szekek_szama < szekek_szama) {
         foglalt_szekek_szama++;
     } else {
-      // red-flag -- start
-      // nincs hiba eldobva
       std::cout << "Nincs tobb szabad hely";
-      // red-flag -- end
     }
 }
 
@@ -25,6 +22,3 @@ size_t Kocsi::getSzekek_szama() const {
 
 Kocsi::~Kocsi() {
 }
-
-// done
-// red-flag : error

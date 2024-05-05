@@ -47,5 +47,3 @@ void Utvonal::removeAllomas(size_t index)
 Utvonal::~Utvonal() {
   if(allomasok != nullptr) delete[] allomasok;
 }
-
-// done
