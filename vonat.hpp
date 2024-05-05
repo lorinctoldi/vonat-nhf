@@ -19,7 +19,7 @@ public:
     Vonat();
     Vonat(const Vonat& other);
     Vonat(Kocsi* kocsik, Utvonal utvonal, Jegy* jegyek);
-    Vonat::Vonat(size_t azonosito, size_t kocsik_sz, Kocsi* kocsik_ptr, Utvonal utv, size_t jegyek_sz, Jegy* jegyek_ptr);
+    Vonat(size_t azonosito, size_t kocsik_sz, Kocsi* kocsik_ptr, Utvonal utv, size_t jegyek_sz, Jegy* jegyek_ptr);
     size_t getAzonosito() const;
     Utvonal getUtvonal() const;
     void setUtvonal(const Utvonal& utvonal);

@@ -1,16 +1,9 @@
-#include "allomas.hpp"
+#include "jegy.hpp"
 
 int main() {
-  // Vonat v;
-  // Menetrend m(v, 1);
 
-  const char* name = "alma"; 
-  size_t id = 12;
-
-  Allomas a(id, name, 12, 10, 16, 30);
-
-  a.changeErkezes(17, 30);
-  a.changeNev("alma");
+  Allomas* a, b;
+  size_t i = 1;
+  ElsoOsztalyJegy j(i, i, i, i, a, b, 1.0);
   return 0;
 }
-

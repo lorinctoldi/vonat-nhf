@@ -1,63 +1,82 @@
 #ifndef JEGY_HPP
 #define JEGY_HPP
 
-class Jegy {
+// red-flag -- start
+#include <cstring>
+#include <cstddef>
+// red-flag -- end
+
+#include "allomas.hpp"
+
+class Jegy
+{
 protected:
-    size_t jegy_azonosito;
-    size_t helyszam;
-    size_t kocsi_szam;
-    size_t vonat_szam;
-    int ar;
+  size_t jegy_azonosito;
+  size_t helyszam;
+  size_t kocsi_szam;
+  size_t vonat_szam;
+  Allomas *indulo;
+  Allomas *cel;
+  double kedvezmeny;
+  int ar;
+  int getAr();
+  
 public:
-    Jegy();
-    Jegy(const Jegy& other);
-    Jegy(size_t azonosito, size_t hely, size_t kocsi, size_t vonat, int price): jegy_azonosito(azonosito), helyszam(hely), kocsi_szam(kocsi), vonat_szam(vonat) { };
-    virtual void setAr(int price);
-    virtual ~Jegy();
-public:
-    Jegy& operator=(const Jegy& other);
-    bool operator==(const Jegy& other) const;
-    bool operator!=(const Jegy& other) const;
+  Jegy();
+  Jegy(size_t azonosito, size_t hely, size_t kocsi, size_t vonat, Allomas *indulo, Allomas *cel);
+  Jegy(const Jegy &other);
+  Jegy &operator=(const Jegy &other);
+
+  virtual void kiir() const = 0;
+  virtual bool operator==(const Jegy &other) const;
+  virtual bool operator!=(const Jegy &other) const;
+  virtual ~Jegy() {}
 };
 
-class ElsoOsztalyJegy : public Jegy {
-private:
-    std::string tipus;
+class ElsoOsztalyJegy : public Jegy
+{
+  char *tipus;
 public:
-    ElsoOsztalyJegy();
-    ElsoOsztalyJegy(size_t azonosito, size_t hely, size_t kocsi, size_t vonat, int price);
-    void setAr(int price);
-    ~ElsoOsztalyJegy();
+  ElsoOsztalyJegy();
+  ElsoOsztalyJegy(const ElsoOsztalyJegy &other);
+  ElsoOsztalyJegy(size_t azonosito, size_t hely, size_t kocsi, size_t vonat, Allomas *indulo, Allomas *cel, double kedvezmeny);
+
+  ~ElsoOsztalyJegy();
+
+  void kiir() const override;
 };
 
-class MasodOsztalyJegy : public Jegy {
-private:
-    std::string tipus;
+class MasodOsztalyJegy : public Jegy
+{
+  char *tipus;
 public:
-    MasodOsztalyJegy();
-    MasodOsztalyJegy(size_t azonosito, size_t hely, size_t kocsi, size_t vonat, int price);
-    void setAr(int price);
-    ~MasodOsztalyJegy();
+  MasodOsztalyJegy();
+  MasodOsztalyJegy(const MasodOsztalyJegy &other);
+  MasodOsztalyJegy(size_t azonosito, size_t hely, size_t kocsi, size_t vonat, Allomas *indulo, Allomas *cel, double kedvezmeny);
+
+  ~MasodOsztalyJegy();
+
+  void kiir() const override;
 };
 
-class DiakJegy : public Jegy {
-private:
-    std::string tipus;
+class DiakJegy : public Jegy
+{
+  char *tipus;
+
 public:
-    DiakJegy();
-    DiakJegy(size_t azonosito, size_t hely, size_t kocsi, size_t vonat, int price);
-    void setAr(int price);
-    ~DiakJegy();
+  DiakJegy();
+  DiakJegy(const Jegy &other);
+  ~DiakJegy();
 };
 
-class NyugdijasJegy : public Jegy {
-private:
-    std::string tipus;
+class NyugdijasJegy : public Jegy
+{
+  char *tipus;
+
 public:
-    NyugdijasJegy();
-    NyugdijasJegy(size_t azonosito, size_t hely, size_t kocsi, size_t vonat, int price);
-    void setAr(int price);
-    ~NyugdijasJegy();
+  NyugdijasJegy();
+  NyugdijasJegy(const Jegy &other);
+  ~NyugdijasJegy();
 };
 
 #endif // JEGY_HPP

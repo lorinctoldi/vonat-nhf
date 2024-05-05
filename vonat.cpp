@@ -21,6 +21,7 @@ Vonat::Vonat(size_t azonosito, size_t kocsik_sz, Kocsi *kocsik_ptr, Utvonal utv,
 
 void Vonat::addJegy(size_t kocsi_szam, size_t hely_szam)
 {
+  
 }
 
 size_t Vonat::getAzonosito() const
@@ -39,11 +40,11 @@ void Vonat::setUtvonal(const Utvonal &utv)
   utvonal = utv;
 }
 
-void Vonat::addKocsi(size_t helyek_szama, size_t kocsi_szam)
+void Vonat::addKocsi(size_t kocsi_szam, size_t helyek_szama)
 {
+  Kocsi(kocsi_szam, helyek_szama);
 }
 
-// Destructor
 Vonat::~Vonat()
 {
   delete[] kocsik;
