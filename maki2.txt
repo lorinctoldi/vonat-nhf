@@ -1,0 +1,61 @@
+===== Menetrend =====
+Vonatok szama:
+1
+===== Vonat =====
+vonat azonosito:
+0
+kocsik szama:
+1
+===== Kocsi =====
+kocsi azonosito:
+0
+szekek szama:
+1
+foglalt szekek szama:
+1
+jegyek szama:
+1
+FELARAS
+JEGY
+===== Jegy =====
+jegy azonosito:
+1
+helyszam:
+1
+kocsiszam:
+0
+vonatszam:
+0
+indulasi allomas:
+a
+1 2
+cel allomas:
+b
+3 3
+ar
+157 Ft
+maki jegy elso osztaly
+0.3
+===== Utvonal =====
+utvonal azonosito:
+0
+allomasok szama:
+2
+===== Allomas =====
+allomas azonosito:
+0
+nev:
+a
+indulas:
+1 2
+erkezes:
+1 1
+===== Allomas =====
+allomas azonosito:
+1
+nev:
+b
+indulas:
+3 4
+erkezes:
+3 3

@@ -54,7 +54,8 @@ void createJegy(Menetrend &m) {
         std::cin >> discountOrFee;
 
         std::cout << "Kérem adja meg a jegy típusának nevet (opcionális): ";
-        std::cin >> tipus;
+        std::cin.ignore();
+        std::getline(std::cin, tipus);
     }
 
     if (std::toupper(choice) != 'I') {
@@ -63,9 +64,10 @@ void createJegy(Menetrend &m) {
         if(std::toupper(choice) == 'I') {
             std::cout << "Kérem adja meg a kedvezmeny merteket tizedes formatumban: ";
             std::cin >> discountOrFee;
+                    std::cin.ignore();
 
             std::cout << "Kérem adja meg a jegy típusának nevet (opcionális): ";
-            std::cin >> tipus;
+            std::getline(std::cin, tipus);
         }
     }
 
