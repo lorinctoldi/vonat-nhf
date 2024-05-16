@@ -1,0 +1,40 @@
+===== Menetrend =====
+Vonatok szama:
+1
+===== Vonat =====
+vonat azonosito:
+0
+kocsik szama:
+1
+===== Kocsi =====
+kocsi azonosito:
+0
+szekek szama:
+1
+foglalt szekek szama:
+0
+jegyek szama:
+0
+===== Utvonal =====
+utvonal azonosito:
+0
+allomasok szama:
+2
+===== Allomas =====
+allomas azonosito:
+0
+nev:
+a
+indulas:
+1 2
+erkezes:
+1 1
+===== Allomas =====
+allomas azonosito:
+1
+nev:
+b
+indulas:
+3 4
+erkezes:
+3 3

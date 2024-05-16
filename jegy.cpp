@@ -71,9 +71,9 @@ void Jegy::kiir(std::ostream &os) const
   << "----------------\n"
   << indulo_nev << " - " << cel_nev << "\n"  
   << "indulas: ";
-  indulo_ido.pretty_write(os);
+  indulo_ido.kiir(os);
   os << "erkezes: ";
-  cel_ido.pretty_write(os) ;
+  cel_ido.kiir(os) ;
   os << "----------------\n" << "ar: " << ar << "Ft\n";
 }
 
@@ -91,8 +91,6 @@ KedvezmenyesJegy::KedvezmenyesJegy(size_t azonosito, size_t hely, size_t kocsi, 
 }
 
 KedvezmenyesJegy::KedvezmenyesJegy(const KedvezmenyesJegy& other): Jegy(other), tipus(other.tipus), kedvezmeny(other.kedvezmeny) {
-    // Implement your copy constructor logic here
-    // Copy all members from 'other' to this object
 }
 
 KedvezmenyesJegy::~KedvezmenyesJegy()

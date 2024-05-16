@@ -31,13 +31,14 @@ public:
     void addOra(int o);
 
     bool operator==(const Ido& other) const;
+    bool operator!=(const Ido& other) const;
 
     void write(std::ostream &os) const
     {
         os << ora << ' ' << perc << '\n';
     }
 
-    void pretty_write(std::ostream &os) const
+    void kiir(std::ostream &os) const
     {
         os << (ora > 9 ? "" : "0") << ora<< ':' << (perc > 9 ? "" : "0") << perc << '\n';
     }

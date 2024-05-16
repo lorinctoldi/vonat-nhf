@@ -41,7 +41,23 @@ public:
   // Vonat lekerdezese a megadott indexen.
   // @param index - a kivant vonat indexe
   // @return Az adott indexen talalhato vonat
-  Vonat& getVonat(size_t index) const;
+  Vonat &getVonat(size_t index) const;
+
+  size_t getVonatokSzama() const;
+
+  void removeVonat(size_t index);
+
+  void createJegy(std::string indulo, std::string erkezo, int indulo_ora, int indulo_perc, double discountOrFee = 0, const std::string &tipus = "");
+
+  void clear()
+  {
+    if (vonatok_szama > 0)
+    {
+      delete[] vonatok;
+      vonatok = nullptr;
+      vonatok_szama = 0;
+    }
+  }
 
   // Menetrend kiiratasa.
   void kiir(std::ostream &os, std::string indulo, std::string erkezo) const;

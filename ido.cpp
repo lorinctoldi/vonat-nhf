@@ -43,3 +43,7 @@ void Ido::addOra(int o) {
 bool Ido::operator==(const Ido& other) const {
     return (other.getOra() == ora && other.getPerc() == perc);
 }
+
+bool Ido::operator!=(const Ido& other) const {
+    return !(*this == other);
+}

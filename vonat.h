@@ -54,11 +54,29 @@ public:
     // @param kocsi - hozzáadni kívánt kocsi
     void addKocsi(Kocsi &kocsi);
 
+    void createKocsi(size_t szekek);
+
     // Jegy hozzáadása a vonathoz.
     // @param jegy - hozzáadni kívánt jegy
     void addJegy(Jegy &jegy);
 
-    size_t createJegy(std::string indulo = "", std::string erkezo = "", int indulo_ora = 0, int indulo_perc = 0, double discountOrFee = 0, const std::string &tipus = "");
+    Jegy* getJegy(size_t index) const;
+
+    bool routeExists(std::string indulo, std::string erkezo) const;
+
+    size_t findAllomas(std::string nev) const;
+
+    int indulasiIdoKulonbseg(std::string nev, int ora, int perc) {
+        size_t allomas_index = findAllomas(nev);
+        if(allomas_index == -1) return -1;
+        Allomas m = utvonal.getAllomas(allomas_index);
+        int i = m.getIndulasOra() * 60 + m.getIndulasPerc();
+        int p = ora * 60 + perc;
+        if(i < p) return -1;
+        return p - i;
+    }
+
+    size_t createJegy(std::string indulo, std::string erkezo, int indulo_ora = 0, int indulo_perc = 0, double discountOrFee = 0, const std::string &tipus = "");
 
     virtual void write(std::ostream &os) const override
     {

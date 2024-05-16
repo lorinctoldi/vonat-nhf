@@ -11,328 +11,183 @@
 #include <fstream>
 
 #include "memtrace.h"
+#include "gtest_lite.h"
 
 using std::cerr;
 using std::cin;
 using std::cout;
 using std::endl;
 
-// TESZT 1: Jegy létrehozása és kiíratása.
+// Ido osztaly kiiras funkciojanak vizsgalata
 void test_1()
 {
-    Allomas allomas1(1, "Budapest", 8, 9, 8, 12);
-    Allomas allomas2(1, "Hargita", 9, 10, 9, 12);
-    Allomas allomas3(1, "Teknoshat", 10, 30, 10, 32);
-    Allomas allomas4(2, "Debrecen", 12, 0, 12, 6);
-    Utvonal utvonal1;
-    utvonal1.addAllomas(allomas1);
-    utvonal1.addAllomas(allomas2);
-    utvonal1.addAllomas(allomas3);
-    utvonal1.addAllomas(allomas4);
-    Vonat vonat1;
-    vonat1.setUtvonal(utvonal1);
-    Kocsi k(1,100);
-    Kocsi k2(2,100);
-    vonat1.addKocsi(k);
-    vonat1.addKocsi(k2);
+  // Stream letrehozasa
+  std::stringstream ss;
 
-    for(size_t i = 0; i < 101; i++) {
-        std::cout << vonat1.createJegy("Budapest", "Teknoshat");
-    }
+  // ===== KIIRAS =====
+  // Ido objektumok letrehozasa konstruktorral
+  Ido i1(10, 12);
+  Ido i2(2, 1);
+
+  // Ido objektumok kiirasa a streamre
+  i1.kiir(ss); // vart: "10:12"
+  i2.kiir(ss); // vart: "02:01"
+
+  // Kiirt erteket vizsgalata
+  EXPECT_STREQ("10:12\n02:01\n", ss.str().c_str());
+  // ===== KIIRAS =====
 }
 
-// TESZT 2: Kedvezményes jegy létrehozása és kiíratása.
+// Ido osztaly perzisztenciajanak vizsgalata
 void test_2()
 {
-    // cout << "---- Test 2: Kedvezményes jegy létrehozása és kiíratása ----" << endl;
-    // Allomas indulo(1, const_cast<char*>("Szeged"), 9, 0, 10, 30);
-    // Allomas cel(2, const_cast<char*>("Pécs"), 13, 0, 16, 45);
-    // KedvezmenyesJegy kedv_jegy(2, 20, 4, 8, &indulo, &cel, 15.0, const_cast<char*>("Diák"));
-    // kedv_jegy.kiir(cout);
+  // Stream letrehozasa
+  std::stringstream ss;
+
+  // ===== PERZISZTENCIA =====
+  // Ido objektumok letrehozasa
+  Ido ido1(8, 30);
+  Ido ido2;
+
+  // Az ido1 objektumot kiirjuk egy stringstreambe
+  ido1.write(ss);
+
+  // Ezutan az ido2 objektumot beolvassuk ugyanabbol a stringstreambol
+  ido2.read(ss);
+
+  EXPECT_TRUE(ido1 == ido2);
+  // ===== PERZISZTENCIA =====
 }
 
-// TESZT 3: Feláras jegy létrehozása és kiíratása.
+// Ido osztaly alapveto muveleteinek vizsgalata
 void test_3()
 {
-    // cout << "---- Test 3: Feláras jegy létrehozása és kiíratása ----" << endl;
-    // Allomas indulo(1, const_cast<char*>("Szombathely"), 8, 15, 10, 30);
-    // Allomas cel(2, const_cast<char*>("Miskolc"), 12, 0, 14, 45);
-    // FelarasJegy felaras_jegy(3, 15, 2, 6, &indulo, &cel, 25.0, const_cast<char*>("Extra"));
-    // felaras_jegy.kiir(cout);
+  // ===== EGYSZERU MUVELETEK =====
+  // Ido objektum letrehozasa konstruktorral
+  Ido i(2, 45);
+
+  // Ellenorizzuk, hogy a konstruktor helyesen allitja be az erteket
+  EXPECT_EQ(2, i.getOra());
+  EXPECT_EQ(45, i.getPerc());
+
+  // Uj ertekek beallitasa a setterek segitsegevel
+  i.setOra(3);
+  i.setPerc(15);
+
+  // Ellenorizzuk, hogy a setterek helyesen mukodnek-e
+  EXPECT_EQ(3, i.getOra());
+  EXPECT_EQ(15, i.getPerc());
+
+  // Orak es percek hozzaadasa
+  i.addOra(2);
+  i.addPerc(30);
+
+  // Ellenorizzuk, hogy az aritmetikai muveletek helyesen mukodnek-e
+  EXPECT_EQ(5, i.getOra());
+  EXPECT_EQ(45, i.getPerc()); // 30 perccel valo novelesnek nem szabad befolyasolnia az ora erteket
+
+  // Ujabb Ido objektum letrehozasa a konstruktorral
+  Ido j(1, 30);
+
+  // Egyenloseg operator ellenorzes
+  EXPECT_FALSE(i == j);
+
+  // Kulonbozoseg operator ellenorzes
+  EXPECT_TRUE(i != j);
+  // ===== EGYSZERU MUVELETEK =====
 }
 
-// TESZT 4: Allomas módosításának tesztelése.
+// Allomas osztaly alapertelmezett konstruktoranak vizsgalata
 void test_4()
 {
-    cout << "---- Test 4: Allomas módosításának tesztelése ----" << endl;
-    Allomas allomas(1, const_cast<char *>("Győr"), 10, 30, 12, 0);
-    cout << "Indulási idő előtti módosítás: ";
-    allomas.changeIndulas(8, 0);
-    cout << "Indulási idő utáni módosítás: ";
-    allomas.changeIndulas(13, 0);
-    cout << "Érkezési idő előtti módosítás: ";
-    allomas.changeErkezes(11, 45);
-    cout << "Érkezési idő utáni módosítás: ";
-    allomas.changeErkezes(15, 30);
+  // ===== KONSTRUKTOR =====
+  Allomas allomas;
+
+  // Ellenorizzuk, hogy az alapertelmezett ertekek helyesen vannak beallitva
+  EXPECT_EQ(0, allomas.getIndulasOra());
+  EXPECT_EQ(0, allomas.getIndulasPerc());
+  EXPECT_EQ(0, allomas.getErkezesOra());
+  EXPECT_EQ(0, allomas.getErkezesPerc());
+  EXPECT_EQ("", allomas.getNev());
+
+  Allomas allomas_2(123, "Teszt Allomas", 10, 30, 12, 45);
+
+  // Ellenorizzuk, hogy az ertekek helyesen vannak beallitva
+  EXPECT_EQ(10, allomas_2.getIndulasOra());
+  EXPECT_EQ(30, allomas_2.getIndulasPerc());
+  EXPECT_EQ(12, allomas_2.getErkezesOra());
+  EXPECT_EQ(45, allomas_2.getErkezesPerc());
+  EXPECT_EQ("Teszt Allomas", allomas_2.getNev());
+  // ===== KONSTRUKTOR =====
 }
 
-// TESZT 5: Vonat létrehozása és kiíratása.
+// Allomas osztaly indulasi es erkezesi idejenek es nevenek modositasanak vizsgalata
 void test_5()
 {
-    cout << "---- Test 5: Vonat létrehozása és kiíratása ----" << endl;
-    Utvonal utvonal;
-    Vonat vonat(1, 3, nullptr, utvonal, 0, nullptr);
-    vonat.setUtvonal(utvonal);
-    cout << "Vonat azonosito: " << vonat.getAzonosito() << endl;
+  // ===== SETTEREK =====
+  Allomas allomas(123, "Teszt Allomas", 10, 30, 12, 45);
+
+  // Modositjuk az indulasi es erkezesi idoket
+  allomas.changeIndulas(11, 0);
+  allomas.changeErkezes(13, 15);
+
+  // Ellenorizzuk, hogy az idok helyesen lettek-e modositva
+  EXPECT_EQ(11, allomas.getIndulasOra());
+  EXPECT_EQ(0, allomas.getIndulasPerc());
+  EXPECT_EQ(13, allomas.getErkezesOra());
+  EXPECT_EQ(15, allomas.getErkezesPerc());
+
+  Allomas allomas_2(123, "Teszt Allomas", 10, 30, 12, 45);
+
+  // Modositjuk a nevet
+  allomas_2.changeNev("Uj Teszt Allomas");
+
+  // Ellenorizzuk, hogy a nev helyesen lett-e modositva
+  EXPECT_EQ("Uj Teszt Allomas", allomas_2.getNev());
+  // ===== SETTEREK =====
 }
 
-// TESZT 6: Menetrend létrehozása és kiíratása.
-void test_6()
-{
-    cout << "---- Test 6: Menetrend létrehozása és kiíratása ----" << endl;
-    Vonat vonat1(1, 3, nullptr, Utvonal(), 0, nullptr);
-    Vonat vonat2(2, 4, nullptr, Utvonal(), 0, nullptr);
-    Vonat vonat3(3, 2, nullptr, Utvonal(), 0, nullptr);
-    Vonat vonatok[] = {vonat1, vonat2, vonat3};
-    Menetrend menetrend(vonatok, 3);
-}
 
-// TESZT 7: Mély másolat vizsgáláta
-void test_7()
-{
-    Allomas allomas1(1, "Budapest", 8, 9, 10, 30);
-    Allomas allomas2(2, "Debrecen", 12, 0, 14, 30);
-
-    Kocsi kocsi1(1, 50);
-    Kocsi kocsi2(2, 60);
-
-    Utvonal utvonal1;
-    utvonal1.addAllomas(allomas1);
-    utvonal1.addAllomas(allomas2);
-
-    FelarasJegy felaras(1, 1, 1, 1, allomas1.getNev(), allomas1.getIndulas(), allomas2.getNev(), allomas2.getErkezes(), 0.8, "nagyon kiraly jegy");
-    Jegy jegy(1, 1, 1, 1, allomas1.getNev(), allomas1.getIndulas(), allomas2.getNev(), allomas2.getErkezes());
-    Jegy *felarasArray[] = {&felaras, &jegy};
-    Vonat vonat1(1, 1, &kocsi1, utvonal1, 2, felarasArray);
-    // Vonat vonat2(2, 1, &kocsi2, utvonal1, 1, &jegy2);
-
-    Menetrend menetrend;
-    menetrend.addVonat(vonat1);
-    // menetrend.addVonat(vonat2);
-
-    std::stringstream ss;
-    menetrend.write(ss);
-
-    Menetrend deserializedMenetrend;
-    deserializedMenetrend.read(ss);
-
-    std::cout << "Eredeti menetrend:" << std::endl;
-    menetrend.write(std::cout);
-
-    std::cout << "\n\n\n\nDeszerelizialt menetrend:" << std::endl;
-    deserializedMenetrend.write(std::cout);
-}
-
-// TESZT 8: Stream-re való kiírás vizsgáláta
-void test_8()
-{
-    Allomas allomas1(1, "Budapest", 8, 9, 10, 30);
-    Allomas allomas2(2, "Debrecen", 12, 0, 14, 30);
-
-    Kocsi kocsi1(1, 50);
-
-    Utvonal utvonal1;
-    utvonal1.addAllomas(allomas1);
-    utvonal1.addAllomas(allomas2);
-
-    FelarasJegy felaras(1, 1, 1, 1, allomas1.getNev(), allomas1.getIndulas(), allomas2.getNev(), allomas2.getErkezes(), 0.8, "nagyon kiraly jegy");
-
-    Jegy *felarasArray[] = {&felaras};
-    Vonat vonat1(1, 1, &kocsi1, utvonal1, 1, felarasArray);
-    KedvezmenyesJegy kedvezmeny(2, 2, 2, 1, allomas1.getNev(), allomas1.getIndulas(), allomas2.getNev(), allomas2.getErkezes(), 0.4, "kedvezmenyes fasza jegy");
-
-    // std::stringstream ss;
-    // vonat1.write(ss);
-
-    // Vonat deserializedVonat;
-    // deserializedVonat.read(ss);
-
-    // std::cout << "Eredeti vonat:" << std::endl;
-    // vonat1.write(std::cout);
-
-    felaras.kiir(std::cout);
-}
-
-// TESZT 9: Stream-ről való beolvasás vizsgáláta
-void test_9()
-{
-    Allomas allomas1(1, "Budapest", 8, 9, 10, 30);
-    Allomas allomas2(2, "Debrecen", 12, 0, 14, 30);
-    Kocsi kocsi1(1, 50);
-    Utvonal utvonal1;
-    utvonal1.addAllomas(allomas1);
-    utvonal1.addAllomas(allomas2);
-    FelarasJegy felaras(1, 1, 1, 1, allomas1.getNev(), allomas1.getIndulas(), allomas2.getNev(), allomas2.getErkezes(), 0.8, "nagyon kiraly jegy");
-    Jegy *felarasArray[] = {&felaras};
-    Vonat vonat1(1, 1, &kocsi1, utvonal1, 1, felarasArray);
-
-    // Write Vonat object to file
-    std::ofstream outFile("vonat_data.txt");
-    if (outFile.is_open())
-    {
-        vonat1.write(outFile);
-        outFile.close();
-    }
-    else
-    {
-        std::cerr << "Error: Unable to open file for writing." << std::endl;
-    }
-
-    // Read Vonat object from file
-    std::ifstream inFile("vonat_data.txt");
-    if (inFile.is_open())
-    {
-        Vonat deserializedVonat;
-        deserializedVonat.read(inFile);
-        inFile.close();
-
-        // Print the original and deserialized Vonat objects
-        std::cout << "Original Vonat:" << std::endl;
-        vonat1.write(std::cout);
-        std::cout << "\n\nDeserialized Vonat:" << std::endl;
-        deserializedVonat.write(std::cout);
-    }
-    else
-    {
-        std::cerr << "Error: Unable to open file for reading." << std::endl;
-    }
-}
-
-void test_10()
-{
-    Allomas allomas1(1, "Budapest", 8, 9, 10, 30);
-    Allomas allomas2(2, "Debrecen", 12, 0, 14, 30);
-
-    Kocsi kocsi1(1, 50);
-
-    Utvonal utvonal1;
-    utvonal1.addAllomas(allomas1);
-    utvonal1.addAllomas(allomas2);
-
-    FelarasJegy felaras(1, 1, 1, 1, allomas1.getNev(), allomas1.getIndulas(), allomas2.getNev(), allomas2.getErkezes(), 0.8, "nagyon kiraly jegy");
-
-    KedvezmenyesJegy kedvezmeny(2, 2, 2, 1, allomas1.getNev(), allomas1.getIndulas(), allomas2.getNev(), allomas2.getErkezes(), 0.4, "kedvezmenyes fasza jegy");
-    Jegy *felarasArray[] = {&kedvezmeny};
-    Vonat vonat1(1, 1, &kocsi1, utvonal1, 1, felarasArray);
-
-    vonat1.addJegy(felaras);
-
-    std::ofstream outFile("vonat_data.txt");
-    if (outFile.is_open())
-    {
-        vonat1.write(outFile);
-        outFile.close();
-    }
-    else
-    {
-        std::cerr << "Error: Unable to open file for writing." << std::endl;
-    }
-
-    // Read Vonat object from file
-    std::ifstream inFile("vonat_data.txt");
-    if (inFile.is_open())
-    {
-        Vonat deserializedVonat;
-        deserializedVonat.read(inFile);
-        inFile.close();
-
-        // Print the original and deserialized Vonat objects
-        std::cout << "Original Vonat:" << std::endl;
-        vonat1.write(std::cout);
-        std::cout << "\n\nDeserialized Vonat:" << std::endl;
-        deserializedVonat.write(std::cout);
-    }
-    else
-    {
-        std::cerr << "Error: Unable to open file for reading." << std::endl;
-    }
-}
-
-void test_11() {
-    Allomas allomas1(1, "Budapest", 8, 9, 8, 12);
-    Allomas allomas2(1, "Hargita", 9, 10, 9, 12);
-    Allomas allomas3(1, "Teknoshat", 10, 30, 10, 32);
-    Allomas allomas4(2, "Debrecen", 12, 0, 12, 6);
-    Utvonal utvonal1;
-    utvonal1.addAllomas(allomas1);
-    utvonal1.addAllomas(allomas2);
-    utvonal1.addAllomas(allomas3);
-    utvonal1.addAllomas(allomas4);
-    Vonat vonat1;
-    vonat1.setUtvonal(utvonal1);
-
-    Menetrend m;
-    m.addVonat(vonat1);
-    m.kiir(std::cout, "Hargita", "");
-}
 
 int main()
 {
-    try
+  try
+  {
+    int nr;
+    cin >> nr;
+    switch (nr)
     {
-        int nr;
-        cin >> nr;
-        switch (nr)
-        {
-        case 1:
-            test_1();
-            break;
-        case 2:
-            test_2();
-            break;
-        case 3:
-            test_3();
-            break;
-        case 4:
-            test_4();
-            break;
-        case 5:
-            test_5();
-            break;
-        case 6:
-            test_6();
-            break;
-        case 7:
-            test_7();
-            break;
-        case 8:
-            test_8();
-            break;
-        case 9:
-            test_9();
-            break;
-        case 10:
-            test_10();
-            break;
-        case 11:
-            test_11();
-            break;
-        default:
-            cout << "Invalid test number!" << endl;
-            break;
-        }
+    case 1:
+      test_1();
+      break;
+    case 2:
+      test_2();
+      break;
+    case 3:
+      test_3();
+      break;
+    case 4:
+      test_4();
+      break;
+    case 5:
+      test_5();
+      break;
+    default:
+      cout << "Hibas teszt szam!" << endl;
+      break;
     }
-    catch (std::exception &e)
-    {
-        cerr << e.what() << endl;
-    }
-    catch (const char *e)
-    {
-        cerr << "Sajat kivetel jott" << endl;
-    }
-    catch (...)
-    {
-        cerr << "*** Nagy baj van! ****" << endl;
-    }
-    return 0;
+  }
+  catch (std::exception &err)
+  {
+    cerr << err.what() << endl;
+  }
+  catch (const char *err)
+  {
+    cerr << err << endl;
+  }
+  catch (...)
+  {
+    cerr << "*** Nagy baj van! ****" << endl;
+  }
+  return 0;
 }

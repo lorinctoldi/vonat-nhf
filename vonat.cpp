@@ -136,8 +136,41 @@ void Vonat::addJegy(Jegy &jegy)
   jegyek_szama++;
 }
 
-size_t Vonat::createJegy(std::string indulo, std::string erkezo, int indulo_ora , int indulo_perc , double discountOrFee , const std::string &tipus)
+Jegy* Vonat::getJegy(size_t index) const {
+    if (index <= jegyek_szama) {
+        return jegyek[index-1];
+    } else {
+        throw std::out_of_range("Index out of range");
+    }
+}
+
+size_t Vonat::findAllomas(std::string nev) const
 {
+  for (size_t i = 0; i < utvonal.getAllomasokSzama(); ++i)
+    if (utvonal.getAllomas(i).getNev() == nev)
+      return i;
+
+  return -1;
+}
+
+bool Vonat::routeExists(std::string indulo, std::string erkezo) const
+{
+  size_t induloIndex = findAllomas(indulo);
+  size_t erkezoIndex = findAllomas(erkezo);
+
+  if (induloIndex == -1 || erkezoIndex == -1 || induloIndex >= erkezoIndex)
+    return false;
+  return true;
+}
+
+size_t Vonat::createJegy(std::string indulo, std::string erkezo, int indulo_ora, int indulo_perc, double discountOrFee, const std::string &tipus)
+{
+  if (!routeExists(indulo, erkezo))
+  {
+    throw "Nincs ilyen ut";
+    return -1;
+  }
+
   size_t kocsi_azonosito = -1;
   size_t hely_szam = -1;
   for (size_t i = 0; i < kocsik_szama; ++i)
@@ -157,34 +190,8 @@ size_t Vonat::createJegy(std::string indulo, std::string erkezo, int indulo_ora 
     return -1;
   }
 
-  bool induloFound = false;
-  bool erkezoFound = false;
-  size_t induloIndex = 0;
-  size_t erkezoIndex = 0;
-
-  for (size_t j = 0; j < utvonal.getAllomasokSzama(); ++j)
-  {
-    std::string allomasNev = utvonal.getAllomas(j).getNev();
-
-    if (allomasNev == indulo)
-    {
-      induloFound = true;
-      induloIndex = j;
-    }
-
-    if (allomasNev == erkezo)
-    {
-      erkezoFound = true;
-      erkezoIndex = j;
-      break;
-    }
-  }
-
-  if (!induloFound || !erkezoFound || induloIndex >= erkezoIndex)
-  {
-    throw "Invalid route: departure and arrival stations not found or in the wrong order";
-    return -1;
-  }
+  size_t induloIndex = findAllomas(indulo);
+  size_t erkezoIndex = findAllomas(erkezo);
 
   Ido indulas = utvonal.getAllomas(induloIndex).getIndulas();
   Ido erkezes = utvonal.getAllomas(erkezoIndex).getErkezes();
@@ -192,18 +199,18 @@ size_t Vonat::createJegy(std::string indulo, std::string erkezo, int indulo_ora 
   Jegy *newJegy;
   if (discountOrFee > 0)
   {
-    newJegy = new FelarasJegy(jegyek_szama, hely_szam, kocsi_azonosito, vonat_azonosito, indulo, indulas, erkezo, erkezes, discountOrFee, tipus);
+    newJegy = new FelarasJegy(jegyek_szama+1, hely_szam+1, kocsi_azonosito, vonat_azonosito, indulo, indulas, erkezo, erkezes, discountOrFee, tipus);
   }
   else if (discountOrFee < 0)
   {
-    newJegy = new KedvezmenyesJegy(jegyek_szama, hely_szam, kocsi_azonosito, vonat_azonosito, indulo, indulas, erkezo, erkezes, discountOrFee, tipus);
+    newJegy = new KedvezmenyesJegy(jegyek_szama+1, hely_szam+1, kocsi_azonosito, vonat_azonosito, indulo, indulas, erkezo, erkezes, discountOrFee, tipus);
   }
   else
   {
-    newJegy = new Jegy(jegyek_szama, hely_szam, kocsi_azonosito, vonat_azonosito, indulo, indulas, erkezo, erkezes);
+    newJegy = new Jegy(jegyek_szama+1, hely_szam+1, kocsi_azonosito, vonat_azonosito, indulo, indulas, erkezo, erkezes);
   }
   addJegy(*newJegy);
-  delete newJegy; // Since addJegy makes a copy, we can safely delete the local object.
+  delete newJegy; 
   return jegyek_szama;
 }
 
@@ -213,6 +220,16 @@ void Vonat::addKocsi(Kocsi &kocsi)
   for (size_t i = 0; i < kocsik_szama; i++)
     temp[i] = kocsik[i];
   temp[kocsik_szama] = kocsi;
+  delete[] kocsik;
+  kocsik = temp;
+  kocsik_szama++;
+}
+
+void Vonat::createKocsi(size_t szekek) {
+  Kocsi *temp = new Kocsi[kocsik_szama + 1];
+  for (size_t i = 0; i < kocsik_szama; i++)
+    temp[i] = kocsik[i];
+  temp[kocsik_szama] = Kocsi(kocsik_szama, szekek);
   delete[] kocsik;
   kocsik = temp;
   kocsik_szama++;
