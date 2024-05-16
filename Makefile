@@ -1,7 +1,7 @@
 PROG	= main
-SRC	= main.cpp allomas.cpp jegy.cpp kocsi.cpp memtrace.cpp menetrend.cpp utvonal.cpp vonat.cpp
+SRC	= main.cpp ido.cpp allomas.cpp jegy.cpp kocsi.cpp memtrace.cpp menetrend.cpp utvonal.cpp vonat.cpp
 OBJ	= $(SRC:.cpp=.o)
-HEAD	= jegy.hpp allomas.hpp memtrace.h menetrend.hpp utvonal.hpp vonat.hpp
+HEAD	= ido.h jegy.h allomas.h serializable.h memtrace.h menetrend.h utvonal.h vonat.h kocsi.h
 TEST	= # testekhez
 DATA	= # sajat adathoz
 

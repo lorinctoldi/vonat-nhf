@@ -1,4 +1,4 @@
-#include "utvonal.hpp"
+#include "utvonal.h"
 
 Utvonal::Utvonal() : utvonal_azonosito(0), allomasok_szama(0), allomasok(nullptr) {}
 
@@ -9,16 +9,37 @@ Utvonal::Utvonal(const Utvonal &other) : utvonal_azonosito(other.utvonal_azonosi
     allomasok[i] = other.allomasok[i];
 }
 
+Utvonal& Utvonal::operator=(const Utvonal &other)
+{
+    if (this == &other) // Check for self-assignment
+        return *this;
+
+    // Deallocate existing dynamic memory
+    delete[] allomasok;
+
+    // Copy data from other object
+    utvonal_azonosito = other.utvonal_azonosito;
+    allomasok_szama = other.allomasok_szama;
+    allomasok = new Allomas[allomasok_szama];
+    for (size_t i = 0; i < allomasok_szama; ++i)
+        allomasok[i] = other.allomasok[i];
+
+    return *this;
+}
+
 void Utvonal::addAllomas(Allomas allomas)
 {
   Allomas *temp = new Allomas[allomasok_szama + 1];
-  for (int i = 0; i < allomasok_szama; ++i)
+  for (size_t i = 0; i < allomasok_szama; ++i) {
     temp[i] = allomasok[i];
+  }
+
   temp[allomasok_szama] = allomas;
   allomasok_szama++;
-  if (allomasok != nullptr)
+
+  if (allomasok != nullptr) {
     delete[] allomasok;
-  delete[] temp;
+  }
   allomasok = temp;
 };
 

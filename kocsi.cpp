@@ -1,4 +1,4 @@
-#include "kocsi.hpp"
+#include "kocsi.h"
 
 Kocsi::Kocsi() : kocsi_azonosito(0), szekek_szama(0), foglalt_szekek_szama(0) {}
 

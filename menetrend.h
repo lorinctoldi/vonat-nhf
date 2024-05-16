@@ -1,13 +1,14 @@
-#ifndef MENETREND_HPP
-#define MENETREND_HPP
+#ifndef MENETREND_H
+#define MENETREND_H
 
-#include "vonat.hpp"
+#include "vonat.h"
 
+#include "serializable.h"
 #include "memtrace.h"
 
 // A Menetrend osztaly reprezentalja a vonatok menetrendjet.
 // Tartalmazza a vonatok szamat es a vonatokat.
-class Menetrend
+class Menetrend : public Serializable
 {
   size_t vonatok_szama; // A menetrendben szereplo vonatok szama.
   Vonat *vonatok;       // A menetrendben szereplo vonatok tombje.
@@ -45,20 +46,33 @@ public:
   // Menetrend kiiratasa.
   void kiir();
 
-  // Operátor túlterhelés: Streambe írás a Menetrend osztályhoz.
-  // @param os - referencia a kimeneti streamre
-  // @param menetrend - referencia a kiírandó Menetrend objektumra
-  // @return A kimeneti stream referenciaja
-  friend std::ostream &operator<<(std::ostream &os, const Menetrend &menetrend);
+  virtual void write(std::ostream &os) const override
+  {
+    os << "===== Menetrend =====\n";
+    os << "Vonatok szama:\n";
+    os << vonatok_szama << '\n';
+    for (size_t i = 0; i < vonatok_szama; ++i)
+    {
+      vonatok[i].write(os);
+    }
+  }
 
-  // Operátor túlterhelés: Streamből olvasás a Menetrend osztályhoz.
-  // @param is - referencia a bemeneti streamre
-  // @param menetrend - referencia a beolvasandó Menetrend objektumra
-  // @return A bemeneti stream referenciaja
-  friend std::istream &operator>>(std::istream &is, Menetrend &menetrend);
+  virtual void read(std::istream &is) override
+  {
+    std::string header;
+    std::getline(is, header); // "===== Menetrend ====="
+    std::getline(is, header); // "Vonatok szama:"
+    is >> vonatok_szama;
+    is.ignore(); // Ignore newline character
+    vonatok = new Vonat[vonatok_szama];
+    for (size_t i = 0; i < vonatok_szama; ++i)
+    {
+      vonatok[i].read(is);
+    }
+  }
 
   // Az osztaly destruktora.
   ~Menetrend();
 };
 
-#endif // MENETREND_HPP
+#endif // MENETREND_H

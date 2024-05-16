@@ -1,26 +1,29 @@
-#ifndef JEGY_HPP
-#define JEGY_HPP
+#ifndef JEGY_H
+#define JEGY_H
 
 #include <cstring>
 #include <cstddef>
 #include <iostream>
 
-#include "allomas.hpp"
+#include "allomas.h"
+#include "ido.h"
+#include "serializable.h"
 
 #include "memtrace.h"
 
 // A Jegy osztaly reprezentalja a vonatjegyeket.
 // Tartalmazza a jegy azonositojat, a helyszamot, a kocsi szamat, a vonat szamat,
 // az indulo es a cel allomast, valamint az arat.
-class Jegy
-{
+class Jegy {
 protected:
   size_t jegy_azonosito;          // A jegy azonositoja.
   size_t helyszam;                // A jegyhez tartozo helyszam.
   size_t kocsi_szam;              // A kocsi azonositoja, ahol a hely talalhato.
   size_t vonat_szam;              // A vonat azonositoja, amelyre a jegy szol.
-  Allomas *indulo;                // Az indulasi allomas.
-  Allomas *cel;                   // A celallomas.
+  std::string indulo_nev;         // Az indulasi allomas neve.
+  Ido indulo_ido;                 // Az indulasi idopont.
+  std::string cel_nev;            // A celallomas neve.
+  Ido cel_ido;                    // A celallomas idopontja.
   int ar;                         // A jegy ara.
   virtual int getAr(double pred); // A jegy arat szamito fuggveny.
 public:
@@ -34,17 +37,8 @@ public:
   // @param vonat - a vonat azonositoja
   // @param indulo - az indulasi allomas
   // @param cel - a celallomas
-  Jegy(size_t azonosito, size_t hely, size_t kocsi, size_t vonat, Allomas *indulo, Allomas *cel);
-
-  // Egyedi konstruktor.
-  // @param azonosito - a jegy azonositoja
-  // @param hely - a helyszam
-  // @param kocsi - a kocsi azonositoja
-  // @param vonat - a vonat azonositoja
-  // @param indulo - az indulasi allomas
-  // @param cel - a celallomas
-  // @param pred - a kedvezmeny elorejelezett erteke
-  Jegy(size_t azonosito, size_t hely, size_t kocsi, size_t vonat, Allomas *indulo, Allomas *cel, int pred);
+  Jegy(size_t azonosito, size_t hely, size_t kocsi, size_t vonat, const std::string &indulo, Ido indulo_idopont,
+       const std::string &cel, Ido cel_idopont);
 
   // Masolo konstruktor.
   // @param other - masolni kivant Jegy objektum
@@ -69,6 +63,10 @@ public:
   // @param os - a kimeneti stream, amire kiirjuk a Jegy adatait
   virtual void kiir(std::ostream &os) const;
 
+  virtual void write(std::ostream &os) const;
+
+  virtual void read(std::istream &is);
+
   // Az osztaly virtualis destruktora.
   virtual ~Jegy() {}
 };
@@ -77,8 +75,8 @@ public:
 // Tartalmazza a tipust (pl. diak, nyugdijas) es a kedvezmeny merteket.
 class KedvezmenyesJegy : public Jegy
 {
-  char *tipus;        // A kedvezmenyes tipus neve.
-  double kedvezmeny;  // A kedvezmeny merteket szazalekban kifejezo ertek.
+  std::string tipus; // A kedvezmenyes tipus neve.
+  double kedvezmeny; // A kedvezmeny merteket szazalekban kifejezo ertek.
 public:
   // Az osztaly alapertelmezett konstruktora.
   KedvezmenyesJegy();
@@ -96,7 +94,8 @@ public:
   // @param cel - a celallomas
   // @param kedvezmeny - a kedvezmeny merteket szazalekban kifejezo ertek
   // @param tipus_nev - a kedvezmenyes tipus neve
-  KedvezmenyesJegy(size_t azonosito, size_t hely, size_t kocsi, size_t vonat, Allomas *indulo, Allomas *cel, double kedvezmeny, char *tipus_nev);
+  KedvezmenyesJegy(size_t azonosito, size_t hely, size_t kocsi, size_t vonat, const std::string &indulo, Ido indulo_idopont,
+                   const std::string &cel, Ido cel_idopont, double kedvezmeny, std::string tipus);
 
   // Az osztaly destruktora.
   ~KedvezmenyesJegy();
@@ -104,14 +103,18 @@ public:
   // Kiiratas operator.
   // @param os - a kimeneti stream, amire kiirjuk a KedvezmenyesJegy adatait
   void kiir(std::ostream &os) const;
+
+  void write(std::ostream &os) const;
+
+  void read(std::istream &is);
 };
 
 // A FelarasJegy osztaly a Jegy osztaly leszarmazottja, es reprezentalja a felaras jegyeket.
 // Tartalmazza a tipust es a felart.
 class FelarasJegy : public Jegy
 {
-  char *tipus;    // A felaras tipus neve.
-  double felar;   // A felar erteket.
+  std::string tipus; // A felaras tipus neve.
+  double felar;      // A felar erteket.
 public:
   // Az osztaly alapertelmezett konstruktora.
   FelarasJegy();
@@ -129,26 +132,19 @@ public:
   // @param cel - a celallomas
   // @param felar - a felar erteket
   // @param tipus_nev - a felaras tipus neve
-  FelarasJegy(size_t azonosito, size_t hely, size_t kocsi, size_t vonat, Allomas *indulo, Allomas *cel, double felar, char *tipus_nev);
+  FelarasJegy(size_t azonosito, size_t hely, size_t kocsi, size_t vonat, const std::string &indulo, Ido indulo_idopont,
+              const std::string &cel, Ido cel_idopont, double felar, std::string tipus);
 
   // Az osztaly destruktora.
   ~FelarasJegy();
 
-  // Operátor túlterhelés: Streambe írás a Jegy osztályhoz.
-  // @param os - referencia a kimeneti streamre
-  // @param jegy - referencia a kiírandó Jegy objektumra
-  // @return A kimeneti stream referenciaja
-  friend std::ostream &operator<<(std::ostream &os, const Jegy &jegy);
-
-  // Operátor túlterhelés: Streamből olvasás a Jegy osztályhoz.
-  // @param is - referencia a bemeneti streamre
-  // @param jegy - referencia a beolvasandó Jegy objektumra
-  // @return A bemeneti stream referenciaja
-  friend std::istream &operator>>(std::istream &is, Jegy &jegy);
-
   // Kiiratas operator.
   // @param os - a kimeneti stream, amire kiirjuk a FelarasJegy adatait
-  void kiir(std::ostream &os) const;
+  void kiir(std::ostream &os) const override;
+
+  void write(std::ostream &os) const override;
+
+  void read(std::istream &is) override;
 };
 
-#endif // JEGY_HPP
+#endif // JEGY_H
