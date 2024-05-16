@@ -1,0 +1,79 @@
+===== Vonat =====
+vonat azonosito:
+1
+kocsik szama:
+1
+===== Kocsi =====
+kocsi azonosito:
+1
+szekek szama:
+50
+foglalt szekek szama:
+0
+jegyek szama:
+2
+KEDVEZMENYES
+JEGY
+===== Jegy =====
+jegy azonosito:
+2
+helyszam:
+2
+kocsiszam:
+2
+vonatszam:
+1
+indulasi allomas:
+Budapest
+8 9
+cel allomas:
+Debrecen
+14 30
+ar
+228 Ft
+kedvezmenyes fasza jegy
+0.4
+FELARAS
+JEGY
+===== Jegy =====
+jegy azonosito:
+1
+helyszam:
+1
+kocsiszam:
+1
+vonatszam:
+1
+indulasi allomas:
+Budapest
+8 9
+cel allomas:
+Debrecen
+14 30
+ar
+685 Ft
+nagyon kiraly jegy
+0.8
+===== Utvonal =====
+utvonal azonosito:
+0
+allomasok szama:
+2
+===== Allomas =====
+allomas azonosito:
+1
+nev:
+Budapest
+indulas:
+8 9
+erkezes:
+10 30
+===== Allomas =====
+allomas azonosito:
+2
+nev:
+Debrecen
+indulas:
+12 0
+erkezes:
+14 30

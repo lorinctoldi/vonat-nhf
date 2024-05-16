@@ -36,6 +36,12 @@ public:
   // @param index - az eltavolitani kivant allomas indexe
   void removeAllomas(size_t index);
 
+  size_t getAllomasokSzama() const;
+
+  Allomas& getAllomas(size_t i) const;
+
+  void kiir(std::ostream &os) const;
+
   void write(std::ostream &os) const
   {
     os << "===== Utvonal =====\n";

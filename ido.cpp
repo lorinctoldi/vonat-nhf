@@ -30,10 +30,6 @@ void Ido::setIdo(int o, int p) {
     perc = p;
 }
 
-void Ido::kiir() const {
-    std::cout << std::setfill('0') << std::setw(2) << ora << ":" << std::setw(2) << perc << std::endl;
-}
-
 void Ido::addPerc(int p) {
     p += perc;
     ora += (p / 60);

@@ -27,12 +27,15 @@ public:
   // @param szekek - a kocsihoz tartozo szekek szama
   Kocsi(size_t azonosito, size_t szekek);
 
+  bool tele() const;
   // Szekek foglalasa a kocsiban.
-  void szek_foglal();
+  size_t reserveHely();
 
   // Szekek szamanak lekerdezese.
   // @return A kocsihoz tartozo szekek szama.
   size_t getSzekek_szama() const;
+
+  size_t getAzonosito() const;
 
   virtual void write(std::ostream &os) const override
   {

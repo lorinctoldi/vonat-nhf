@@ -1,9 +1,10 @@
 {
   "files.associations": {
-    "__locale": "cpp",
+    "iosfwd": "cpp",
     "__bit_reference": "cpp",
     "__config": "cpp",
     "__hash_table": "cpp",
+    "__locale": "cpp",
     "__node_handle": "cpp",
     "__split_buffer": "cpp",
     "__threading_support": "cpp",
@@ -27,7 +28,6 @@
     "initializer_list": "cpp",
     "iomanip": "cpp",
     "ios": "cpp",
-    "iosfwd": "cpp",
     "iostream": "cpp",
     "istream": "cpp",
     "limits": "cpp",
@@ -62,9 +62,6 @@
     "memory": "cpp",
     "system_error": "cpp",
     "type_traits": "cpp",
-    "algorithm": "cpp",
-    "fstream": "cpp",
-    "regex": "cpp",
-    "filesystem": "cpp"
+    "algorithm": "cpp"
   }
 }

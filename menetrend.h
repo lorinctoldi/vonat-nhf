@@ -41,10 +41,10 @@ public:
   // Vonat lekerdezese a megadott indexen.
   // @param index - a kivant vonat indexe
   // @return Az adott indexen talalhato vonat
-  Vonat getVonat(size_t index);
+  Vonat& getVonat(size_t index) const;
 
   // Menetrend kiiratasa.
-  void kiir();
+  void kiir(std::ostream &os, std::string indulo, std::string erkezo) const;
 
   virtual void write(std::ostream &os) const override
   {

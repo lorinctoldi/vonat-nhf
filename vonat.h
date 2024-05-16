@@ -16,8 +16,8 @@ private:
     size_t vonat_azonosito; // A vonat azonositoja.
     size_t kocsik_szama;    // A vonathoz tartozo kocsik szama.
     Kocsi *kocsik;          // A vonathoz tartozo kocsik tombje.
-    size_t jegyek_szama;    // A vonathoz tartozo jegyek szama.
-    Jegy *jegyek;           // A vonathoz tartozo jegyek tombje.
+    Jegy **jegyek;          // Array of pointers to Jegy
+    size_t jegyek_szama;    // Number of jegyek in the array
     Utvonal utvonal;        // A vonathoz tartozo utvonal.
 public:
     // Az osztály alapértelmezett konstruktora.
@@ -36,7 +36,7 @@ public:
     // @param utv - az útvonal, amelyhez a vonat tartozik
     // @param jegyek_sz - a vonathoz tartozó jegyek száma
     // @param jegyek_ptr - a jegyek tömbjére mutató pointer
-    Vonat(size_t azonosito, size_t kocsik_sz, Kocsi *kocsik_ptr, Utvonal utv, size_t jegyek_sz, Jegy *jegyek_ptr);
+    Vonat(size_t azonosito, size_t kocsik_sz, Kocsi *kocsik_ptr, Utvonal utv, size_t jegyek_sz, Jegy **jegyek_ptr);
 
     // Azonosító lekérdezése.
     // @return A vonat azonosítója.
@@ -58,6 +58,8 @@ public:
     // @param jegy - hozzáadni kívánt jegy
     void addJegy(Jegy &jegy);
 
+    size_t createJegy(std::string indulo = "", std::string erkezo = "", int indulo_ora = 0, int indulo_perc = 0, double discountOrFee = 0, const std::string &tipus = "");
+
     virtual void write(std::ostream &os) const override
     {
         os << "===== Vonat =====\n";
@@ -73,7 +75,7 @@ public:
         os << jegyek_szama << '\n';
         for (size_t i = 0; i < jegyek_szama; ++i)
         {
-            jegyek[i].write(os);
+            jegyek[i]->write(os);
         }
         utvonal.write(os);
     }
@@ -88,36 +90,44 @@ public:
         std::getline(is, header); // "kocsik szama:"
         is >> kocsik_szama;
         is.ignore(); // Ignore newline character
+
+        // Allocate memory for kocsik array
+        delete[] kocsik;
         kocsik = new Kocsi[kocsik_szama];
+
+        // Read each kocsi object
         for (size_t i = 0; i < kocsik_szama; ++i)
         {
             kocsik[i].read(is);
         }
+
         std::getline(is, header); // "jegyek szama:"
         is >> jegyek_szama;
-        is.ignore();                     // Ignore newline character
-        jegyek = new Jegy[jegyek_szama]; // Allocate array of pointers
+        is.ignore(); // Ignore newline character
+
+        // Allocate memory for jegyek array
+        delete[] jegyek;
+        jegyek = new Jegy *[jegyek_szama];
+
+        // Read each jegy object
         for (size_t i = 0; i < jegyek_szama; ++i)
         {
             std::string type;
             std::getline(is, type); // Read type identifier
             if (type == "JEGY")
             {
-                Jegy j;
-                j.read(is); // Call read() on the base class object
-                jegyek[i] = j;
+                jegyek[i] = new Jegy();
+                jegyek[i]->read(is);
             }
             else if (type == "KEDVEZMENYES")
             {
-                KedvezmenyesJegy j;
-                j.read(is); // Call read() on the derived class object
-                jegyek[i] = j;
+                jegyek[i] = new KedvezmenyesJegy();
+                jegyek[i]->read(is);
             }
             else if (type == "FELARAS")
             {
-                FelarasJegy j;
-                j.read(is); // Call read() on the derived class object
-                jegyek[i] = j;
+                jegyek[i] = new FelarasJegy();
+                jegyek[i]->read(is);
             }
         }
         utvonal.read(is);

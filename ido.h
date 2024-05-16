@@ -4,6 +4,8 @@
 #include <iostream>
 #include "serializable.h"
 
+#include "memtrace.h"
+
 class Ido : public Serializable
 {
 private:
@@ -25,7 +27,6 @@ public:
     void setPerc(int p);
 
     void setIdo(int o, int p);
-    void kiir() const;
     void addPerc(int p);
     void addOra(int o);
 
@@ -34,6 +35,11 @@ public:
     void write(std::ostream &os) const
     {
         os << ora << ' ' << perc << '\n';
+    }
+
+    void pretty_write(std::ostream &os) const
+    {
+        os << (ora > 9 ? "" : "0") << ora<< ':' << (perc > 9 ? "" : "0") << perc << '\n';
     }
 
     void read(std::istream &is)

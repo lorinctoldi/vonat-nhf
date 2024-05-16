@@ -65,6 +65,22 @@ void Utvonal::removeAllomas(size_t index)
   }
 }
 
+size_t Utvonal::getAllomasokSzama() const {
+  return allomasok_szama;
+}
+
+Allomas& Utvonal::getAllomas(size_t i) const {
+  return allomasok[i];
+}
+
+void Utvonal::kiir(std::ostream &os) const {
+  for(size_t i = 0; i < allomasok_szama; ++i) {
+    os << "\t" << allomasok[i].getNev() << " : ";
+    allomasok[i].getIndulas().pretty_write(os);
+    if(i != allomasok_szama-1) os << "\t|\n";
+  }
+}
+
 Utvonal::~Utvonal() {
   if(allomasok != nullptr) delete[] allomasok;
 }
