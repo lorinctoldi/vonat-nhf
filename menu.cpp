@@ -24,6 +24,63 @@ void printMenu()
                  "(7) Kilepes\n";
 }
 
+void createJegy(Menetrend &m) {
+    std::string indulo, erkezo;
+    int ora, perc;
+    double discountOrFee;
+    std::string tipus;
+
+    // Read in the information from the user
+    std::cout << "Kérem adja meg az induló állomás nevét: ";
+    std::cin >> indulo;
+
+    std::cout << "Kérem adja meg az érkező állomás nevét: ";
+    std::cin >> erkezo;
+
+    std::cout << "Kérem adja meg az indulási orat: ";
+    std::cin >> ora;
+    std::cin.ignore();
+
+    std::cout << "Kérem adja meg az indulási percet: ";
+    std::cin >> perc;
+    std::cin.ignore();
+
+    char choice;
+    std::cout << "Első osztályú jegy? (I/N): ";
+    std::cin >> choice;
+
+    if (std::toupper(choice) == 'I') {
+        std::cout << "Kérem adja meg a jegy dijanak felarat tizedes formatumban: ";
+        std::cin >> discountOrFee;
+
+        std::cout << "Kérem adja meg a jegy típusának nevet (opcionális): ";
+        std::cin >> tipus;
+    }
+
+    if (std::toupper(choice) != 'I') {
+        std::cout << "Kedvezmenyes jegy? (I/N): ";
+        std::cin >> choice;
+        if(std::toupper(choice) == 'I') {
+            std::cout << "Kérem adja meg a kedvezmeny merteket tizedes formatumban: ";
+            std::cin >> discountOrFee;
+
+            std::cout << "Kérem adja meg a jegy típusának nevet (opcionális): ";
+            std::cin >> tipus;
+        }
+    }
+
+
+    // Call the Menetrend::createJegy method with the provided information
+    try {
+        if(std::toupper(choice) == 'I')
+            m.createJegy(indulo, erkezo, ora, perc, discountOrFee, tipus);
+        else
+            m.createJegy(indulo, erkezo, ora, perc);
+    } catch (const char* msg) {
+        std::cerr << "Hiba: " << msg << std::endl;
+    }
+}
+
 void addVonat(Menetrend &m)
 {
     Vonat v;
@@ -204,6 +261,7 @@ int main()
         {
         case 1:
             std::cout << "Jegykiadás menüpont kiválasztva.\n";
+            createJegy(m);
             break;
         case 2:
             std::cout << "Vonat felvétel menüpont kiválasztva.\n";
