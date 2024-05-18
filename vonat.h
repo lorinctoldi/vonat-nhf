@@ -66,90 +66,14 @@ public:
 
     size_t findAllomas(std::string nev) const;
 
-    int indulasiIdoKulonbseg(std::string nev, int ora, int perc) {
-        size_t allomas_index = findAllomas(nev);
-        if(allomas_index == -1) return -1;
-        Allomas m = utvonal.getAllomas(allomas_index);
-        int i = m.getIndulasOra() * 60 + m.getIndulasPerc();
-        int p = ora * 60 + perc;
-        if(i < p) return -1;
-        return p - i;
-    }
+    int indulasiIdoKulonbseg(std::string nev, int ora, int perc);
 
     size_t createJegy(std::string indulo, std::string erkezo, int indulo_ora = 0, int indulo_perc = 0, double discountOrFee = 0, const std::string &tipus = "");
 
-    virtual void write(std::ostream &os) const override
-    {
-        os << "===== Vonat =====\n";
-        os << "vonat azonosito:\n";
-        os << vonat_azonosito << '\n';
-        os << "kocsik szama:\n";
-        os << kocsik_szama << '\n';
-        for (size_t i = 0; i < kocsik_szama; ++i)
-        {
-            kocsik[i].write(os);
-        }
-        os << "jegyek szama:\n";
-        os << jegyek_szama << '\n';
-        for (size_t i = 0; i < jegyek_szama; ++i)
-        {
-            jegyek[i]->write(os);
-        }
-        utvonal.write(os);
-    }
+    virtual void write(std::ostream &os) const override;
 
-    virtual void read(std::istream &is) override
-    {
-        std::string header;
-        std::getline(is, header); // "===== Vonat ====="
-        std::getline(is, header); // "vonat azonosito:"
-        is >> vonat_azonosito;
-        is.ignore();              // Ignore newline character
-        std::getline(is, header); // "kocsik szama:"
-        is >> kocsik_szama;
-        is.ignore(); // Ignore newline character
+    virtual void read(std::istream &is) override;
 
-        // Allocate memory for kocsik array
-        delete[] kocsik;
-        kocsik = new Kocsi[kocsik_szama];
-
-        // Read each kocsi object
-        for (size_t i = 0; i < kocsik_szama; ++i)
-        {
-            kocsik[i].read(is);
-        }
-
-        std::getline(is, header); // "jegyek szama:"
-        is >> jegyek_szama;
-        is.ignore(); // Ignore newline character
-
-        // Allocate memory for jegyek array
-        delete[] jegyek;
-        jegyek = new Jegy *[jegyek_szama];
-
-        // Read each jegy object
-        for (size_t i = 0; i < jegyek_szama; ++i)
-        {
-            std::string type;
-            std::getline(is, type); // Read type identifier
-            if (type == "JEGY")
-            {
-                jegyek[i] = new Jegy();
-                jegyek[i]->read(is);
-            }
-            else if (type == "KEDVEZMENYES")
-            {
-                jegyek[i] = new KedvezmenyesJegy();
-                jegyek[i]->read(is);
-            }
-            else if (type == "FELARAS")
-            {
-                jegyek[i] = new FelarasJegy();
-                jegyek[i]->read(is);
-            }
-        }
-        utvonal.read(is);
-    }
     // Az osztály destruktora.
     ~Vonat();
 };

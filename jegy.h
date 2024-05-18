@@ -101,9 +101,6 @@ public:
   KedvezmenyesJegy(size_t azonosito, size_t hely, size_t kocsi, size_t vonat, const std::string &indulo, Ido indulo_idopont,
                    const std::string &cel, Ido cel_idopont, double kedvezmeny, std::string tipus);
 
-  // Az osztaly destruktora.
-  ~KedvezmenyesJegy();
-
   KedvezmenyesJegy &operator=(const KedvezmenyesJegy &other);
 
   // Kiiratas operator.
@@ -113,6 +110,9 @@ public:
   void write(std::ostream &os) const;
 
   void read(std::istream &is);
+
+  // Az osztaly destruktora.
+  ~KedvezmenyesJegy();
 };
 
 // A FelarasJegy osztaly a Jegy osztaly leszarmazottja, es reprezentalja a felaras jegyeket.
@@ -143,9 +143,6 @@ public:
 
   FelarasJegy &operator=(const FelarasJegy &other);
 
-  // Az osztaly destruktora.
-  ~FelarasJegy();
-
   // Kiiratas operator.
   // @param os - a kimeneti stream, amire kiirjuk a FelarasJegy adatait
   void kiir(std::ostream &os) const override;
@@ -153,6 +150,8 @@ public:
   void write(std::ostream &os) const override;
 
   void read(std::istream &is) override;
+
+  ~FelarasJegy();
 };
 
 #endif // JEGY_H

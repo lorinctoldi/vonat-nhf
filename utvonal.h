@@ -44,35 +44,9 @@ public:
 
   void kiir(std::ostream &os) const;
 
-  void write(std::ostream &os) const
-  {
-    os << "===== Utvonal =====\n";
-    os << "utvonal azonosito:\n";
-    os << utvonal_azonosito << '\n';
-    os << "allomasok szama:\n";
-    os << allomasok_szama << '\n';
-    for (size_t i = 0; i < allomasok_szama; ++i)
-    {
-      allomasok[i].write(os);
-    }
-  }
+  void write(std::ostream &os) const;
 
-  void read(std::istream &is)
-  {
-    std::string header;
-    std::getline(is, header); // "===== Utvonal ====="
-    std::getline(is, header); // "utvonal azonosito:"
-    is >> utvonal_azonosito;
-    is.ignore();              // Ignore newline character
-    std::getline(is, header); // "allomasok szama:"
-    is >> allomasok_szama;
-    is.ignore(); // Ignore newline character
-    allomasok = new Allomas[allomasok_szama];
-    for (size_t i = 0; i < allomasok_szama; ++i)
-    {
-      allomasok[i].read(is);
-    }
-  }
+  void read(std::istream &is);
 
   // Az osztaly destruktora.
   ~Utvonal();

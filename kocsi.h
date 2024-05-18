@@ -37,31 +37,9 @@ public:
 
   size_t getAzonosito() const;
 
-  virtual void write(std::ostream &os) const override
-  {
-    os << "===== Kocsi =====\n";
-    os << "kocsi azonosito:\n";
-    os << kocsi_azonosito << '\n';
-    os << "szekek szama:\n";
-    os << szekek_szama << '\n';
-    os << "foglalt szekek szama:\n";
-    os << foglalt_szekek_szama << '\n';
-  }
+  virtual void write(std::ostream &os) const override;
 
-  virtual void read(std::istream &is) override
-  {
-    std::string header;
-    std::getline(is, header); // "===== Kocsi ====="
-    std::getline(is, header); // "kocsi azonosito:"
-    is >> kocsi_azonosito;
-    is.ignore(); // Ignore newline character
-    std::getline(is, header); // "szekek szama:"
-    is >> szekek_szama;
-    is.ignore(); // Ignore newline character
-    std::getline(is, header); // "foglalt szekek szama:"
-    is >> foglalt_szekek_szama;
-    is.ignore();
-  }
+  virtual void read(std::istream &is) override;
 
   // Az osztaly destruktora.
   ~Kocsi();

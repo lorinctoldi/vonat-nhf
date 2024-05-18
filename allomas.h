@@ -11,7 +11,7 @@
 class Allomas : public Serializable
 {
   size_t allomas_azonosito; // Az allomas azonositoja.
-  std::string nev;               // Az allomas neve.
+  std::string nev;          // Az allomas neve.
   Ido indulas;              // Az indulasi idopontjanak taroloja.
   Ido erkezes;              // Az erkezesi idopontjanak taroloja.
 public:
@@ -63,45 +63,17 @@ public:
   // @return Az erkezesi perc
   int getErkezesPerc();
 
-  Ido& getIndulas() {
-    return indulas;
-  }
+  Ido& getIndulas();
 
-  Ido& getErkezes() {
-    return erkezes;
-  }
+  Ido& getErkezes();
 
   // Az allomas nevenek lekerdezese.
   // @return Az allomas neve
   std::string &getNev();
 
-  void write(std::ostream &os) const
-  {
-       os << "===== Allomas =====\n";
-    os << "allomas azonosito:\n";
-    os << allomas_azonosito << '\n';
-    os << "nev:\n";
-    os << nev << '\n';
-    os << "indulas:\n";
-    indulas.write(os);
-    os << "erkezes:\n";
-    erkezes.write(os);
-  }
+  void write(std::ostream &os) const;
 
-  void read(std::istream &is)
-  {
-    std::string header;
-    std::getline(is, header); // "===== Allomas ====="
-    std::getline(is, header); // "allomas azonosito:"
-    is >> allomas_azonosito;
-    is.ignore();              // Ignore newline character
-    std::getline(is, header); // "nev:"
-    std::getline(is, nev);    // Directly read into std::string
-    std::getline(is, header); // "indulas:"
-    indulas.read(is);
-    std::getline(is, header); // "erkezes:"
-    erkezes.read(is);
-  }
+  void read(std::istream &is);
 
   // Az osztaly destruktora.
   ~Allomas();

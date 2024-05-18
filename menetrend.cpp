@@ -83,6 +83,22 @@ void Menetrend::createJegy(std::string indulo, std::string erkezo, int indulo_or
   vonatok[leghamarabb_indulo_vonat].getJegy(jegy_index)->kiir(std::cout);
 }
 
+void Menetrend::createVonat() {
+  Vonat v;
+  addVonat(v);
+}
+
+void Menetrend::clear()
+  {
+    if (vonatok_szama > 0)
+    {
+      delete[] vonatok;
+      vonatok = nullptr;
+      vonatok_szama = 0;
+    }
+  }
+
+
 void Menetrend::kiir(std::ostream &os, std::string indulo = "", std::string erkezo = "") const
 {
   for (size_t i = 0; i < vonatok_szama; ++i)
@@ -99,7 +115,6 @@ void Menetrend::kiir(std::ostream &os, std::string indulo = "", std::string erke
 
       if ((induloIndex != -1) && (erkezoIndex != -1) && induloIndex < erkezoIndex)
       {
-        // Print "..." if there are stations before indulo
         if (induloIndex > 0)
         {
           os << "        ...\n";
@@ -115,10 +130,8 @@ void Menetrend::kiir(std::ostream &os, std::string indulo = "", std::string erke
           os << "        |\n";
         }
 
-        // Print erkezo station
         os << "        " << u.getAllomas(erkezoIndex).getNev() << " : " << u.getAllomas(erkezoIndex).getErkezes().getOra() << ":" << u.getAllomas(erkezoIndex).getErkezes().getPerc() << "\n";
 
-        // Print "..." if there are stations after erkezo
         if (erkezoIndex < u.getAllomasokSzama() - 1)
         {
           os << "        |\n";
@@ -127,14 +140,12 @@ void Menetrend::kiir(std::ostream &os, std::string indulo = "", std::string erke
       }
       else if ((induloIndex != -1))
       {
-        // Print "..." if there are stations before indulo
         if (induloIndex > 0)
         {
           os << "        ...\n";
           os << "        |\n";
         }
 
-        // Print all stations from indulo to the end
         for (size_t j = induloIndex; j < u.getAllomasokSzama(); ++j)
         {
           os << "        " << u.getAllomas(j).getNev() << " : " << u.getAllomas(j).getIndulas().getOra() << ":" << u.getAllomas(j).getIndulas().getPerc() << "\n";
@@ -146,7 +157,6 @@ void Menetrend::kiir(std::ostream &os, std::string indulo = "", std::string erke
       }
       else if ((erkezoIndex != -1))
       {
-        // Print all stations from the beginning to erkezo
         for (size_t j = 0; j <= erkezoIndex; ++j)
         {
           os << "        " << u.getAllomas(j).getNev() << " : " << u.getAllomas(j).getIndulas().getOra() << ":" << u.getAllomas(j).getIndulas().getPerc() << "\n";
@@ -156,7 +166,6 @@ void Menetrend::kiir(std::ostream &os, std::string indulo = "", std::string erke
           }
         }
 
-        // Print "..." if there are stations after erkezo
         if (erkezoIndex < u.getAllomasokSzama() - 1)
         {
           os << "        |\n";
@@ -170,6 +179,31 @@ void Menetrend::kiir(std::ostream &os, std::string indulo = "", std::string erke
     }
   }
 }
+
+void Menetrend::write(std::ostream &os) const
+  {
+    os << "===== Menetrend =====\n";
+    os << "Vonatok szama:\n";
+    os << vonatok_szama << '\n';
+    for (size_t i = 0; i < vonatok_szama; ++i)
+    {
+      vonatok[i].write(os);
+    }
+  }
+
+  void Menetrend::read(std::istream &is)
+  {
+    std::string header;
+    std::getline(is, header);
+    std::getline(is, header);
+    is >> vonatok_szama;
+    is.ignore();
+    vonatok = new Vonat[vonatok_szama];
+    for (size_t i = 0; i < vonatok_szama; ++i)
+    {
+      vonatok[i].read(is);
+    }
+  }
 
 Menetrend::~Menetrend()
 {

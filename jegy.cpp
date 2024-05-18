@@ -16,8 +16,8 @@ Jegy::Jegy(size_t azonosito, size_t hely, size_t kocsi, size_t vonat, const std:
     : jegy_azonosito(azonosito), helyszam(hely), kocsi_szam(kocsi), vonat_szam(vonat),
       indulo_nev(indulo), indulo_ido(indulo_idopont), cel_nev(cel), cel_ido(cel_idopont), ar(getAr()) {}
 
-Jegy::Jegy(size_t azonosito, size_t hely, size_t kocsi, size_t vonat, const std::string& indulo, Ido indulo_idopont,
-           const std::string& cel, Ido cel_idopont, double pred)
+Jegy::Jegy(size_t azonosito, size_t hely, size_t kocsi, size_t vonat, const std::string &indulo, Ido indulo_idopont,
+           const std::string &cel, Ido cel_idopont, double pred)
     : jegy_azonosito(azonosito), helyszam(hely), kocsi_szam(kocsi), vonat_szam(vonat),
       indulo_nev(indulo), indulo_ido(indulo_idopont), cel_nev(cel), cel_ido(cel_idopont), ar(getAr(pred)) {}
 
@@ -64,20 +64,73 @@ bool Jegy::operator!=(const Jegy &other) const
 void Jegy::kiir(std::ostream &os) const
 {
   os << "===== JEGY =====\n"
-  << "azonosito: " <<  jegy_azonosito << "\n"  
-  << "vonat szama: " <<  vonat_szam << "\n"  
-  << "kocsi szam: " <<  kocsi_szam << "\n"  
-  << "hely szam: " << helyszam << "\n"
-  << "----------------\n"
-  << indulo_nev << " - " << cel_nev << "\n"  
-  << "indulas: ";
+     << "azonosito: " << jegy_azonosito << "\n"
+     << "vonat szama: " << vonat_szam << "\n"
+     << "kocsi szam: " << kocsi_szam << "\n"
+     << "hely szam: " << helyszam << "\n"
+     << "----------------\n"
+     << indulo_nev << " - " << cel_nev << "\n"
+     << "indulas: ";
   indulo_ido.kiir(os);
   os << "erkezes: ";
-  cel_ido.kiir(os) ;
-  os << "----------------\n" << "ar: " << ar << "Ft\n";
+  cel_ido.kiir(os);
+  os << "----------------\n"
+     << "ar: " << ar << "Ft\n";
 }
 
-// kedvezmenyes jegy
+void Jegy::write(std::ostream &os) const
+{
+  os << "JEGY\n"; // Type identifier
+  os << "===== Jegy =====\n"
+     << "jegy azonosito:\n"
+     << jegy_azonosito << "\n"
+     << "helyszam:\n"
+     << helyszam << "\n"
+     << "kocsiszam:\n"
+     << kocsi_szam << "\n"
+     << "vonatszam:\n"
+     << vonat_szam << "\n"
+     << "indulasi allomas:\n"
+     << indulo_nev << "\n";
+  indulo_ido.write(os);
+  os << "cel allomas:\n"
+     << cel_nev << "\n";
+  cel_ido.write(os);
+  os << "ar\n"
+     << ar << " Ft\n";
+}
+
+void Jegy::read(std::istream &is)
+{
+  std::string header;
+  std::getline(is, header);
+  if (header == "JEGY")
+    std::getline(is, header);
+  std::getline(is, header);
+  is >> jegy_azonosito;
+  is.ignore();
+  std::getline(is, header);
+  is >> helyszam;
+  is.ignore();
+  std::getline(is, header);
+  is >> kocsi_szam;
+  is.ignore();
+  std::getline(is, header);
+  is >> vonat_szam;
+  is.ignore();
+  std::getline(is, header);
+  std::getline(is, indulo_nev);
+  indulo_ido.read(is);
+  std::getline(is, header);
+  std::getline(is, cel_nev);
+  cel_ido.read(is);
+  std::getline(is, header);
+  is >> ar;
+  is.ignore(3, '\n');
+  is.ignore();
+}
+
+// KEDVEZMENYES JEGY
 
 KedvezmenyesJegy::KedvezmenyesJegy() : Jegy()
 {
@@ -90,23 +143,51 @@ KedvezmenyesJegy::KedvezmenyesJegy(size_t azonosito, size_t hely, size_t kocsi, 
 {
 }
 
-KedvezmenyesJegy::KedvezmenyesJegy(const KedvezmenyesJegy& other): Jegy(other), tipus(other.tipus), kedvezmeny(other.kedvezmeny) {
+KedvezmenyesJegy::KedvezmenyesJegy(const KedvezmenyesJegy &other) : Jegy(other), tipus(other.tipus), kedvezmeny(other.kedvezmeny)
+{
 }
 
-KedvezmenyesJegy::~KedvezmenyesJegy()
+KedvezmenyesJegy &KedvezmenyesJegy::operator=(const KedvezmenyesJegy &other)
 {
+  if (this != &other)
+  {
+    Jegy::operator=(other);
+
+    tipus = other.tipus;
+    kedvezmeny = other.kedvezmeny;
+  }
+  return *this;
 }
 
 void KedvezmenyesJegy::kiir(std::ostream &os) const
 {
   Jegy::kiir(os);
   os << "tipus: " << tipus << "\n"
-  << "kedvezmeny merteke: " << (kedvezmeny * 100) << "%\n";
+     << "kedvezmeny merteke: " << (kedvezmeny * 100) << "%\n";
 }
 
+void KedvezmenyesJegy::write(std::ostream &os) const
+{
+  os << "KEDVEZMENYES\n";
+  Jegy::write(os);
+  os << tipus << "\n"
+    << kedvezmeny << "\n";
+}
 
+void KedvezmenyesJegy::read(std::istream &is)
+{
+  std::string header;
+  Jegy::read(is);
+  std::getline(is, tipus);
+  is >> kedvezmeny;
+  is.ignore();
+}
 
-// felaras jegy
+KedvezmenyesJegy::~KedvezmenyesJegy()
+{
+}
+
+// FELARAS JEGY
 
 FelarasJegy::FelarasJegy() : Jegy()
 {
@@ -119,120 +200,46 @@ FelarasJegy::FelarasJegy(size_t azonosito, size_t hely, size_t kocsi, size_t von
 {
 }
 
-FelarasJegy::FelarasJegy(const FelarasJegy& other): Jegy(other), tipus(other.tipus), felar(other.felar) {
-    // Implement your copy constructor logic here
-    // Copy all members from 'other' to this object
+FelarasJegy::FelarasJegy(const FelarasJegy &other) : Jegy(other), tipus(other.tipus), felar(other.felar)
+{
 }
 
-FelarasJegy::~FelarasJegy()
+FelarasJegy &FelarasJegy::operator=(const FelarasJegy &other)
 {
+  if (this != &other)
+  {
+    Jegy::operator=(other);
+
+    tipus = other.tipus;
+    felar = other.felar;
+  }
+  return *this;
 }
 
 void FelarasJegy::kiir(std::ostream &os) const
 {
   Jegy::kiir(os);
   os << "tipus: " << tipus << "\n"
-  << "felar merteke: " << (felar * 100) << "%\n";
+     << "felar merteke: " << (felar * 100) << "%\n";
 }
 
-// write
-void Jegy::write(std::ostream &os) const {
-    os << "JEGY\n"; // Type identifier
-    os << "===== Jegy =====\n"
-       << "jegy azonosito:\n"
-       << jegy_azonosito << "\n"
-       << "helyszam:\n"
-       << helyszam << "\n"
-       << "kocsiszam:\n"
-       << kocsi_szam << "\n"
-       << "vonatszam:\n"
-       << vonat_szam << "\n"
-       << "indulasi allomas:\n"
-       << indulo_nev << "\n";
-    indulo_ido.write(os);
-    os << "cel allomas:\n"
-       << cel_nev << "\n";
-    cel_ido.write(os);
-    os << "ar\n"
-       << ar << " Ft\n";
+void FelarasJegy::write(std::ostream &os) const
+{
+  os << "FELARAS\n";
+  Jegy::write(os);
+  os << tipus << "\n"
+     << felar << "\n";
 }
 
-void Jegy::read(std::istream &is) {
-    std::string header;
-    std::getline(is, header);
-    if(header == "JEGY") std::getline(is, header);
-    std::getline(is, header);
-    is >> jegy_azonosito;
-    is.ignore();
-    std::getline(is, header);
-    is >> helyszam;
-    is.ignore();
-    std::getline(is, header);
-    is >> kocsi_szam;
-    is.ignore();
-    std::getline(is, header);
-    is >> vonat_szam;
-    is.ignore();
-    std::getline(is, header);
-    std::getline(is, indulo_nev);
-    indulo_ido.read(is);
-    std::getline(is, header);
-    std::getline(is, cel_nev);
-    cel_ido.read(is);
-    std::getline(is, header);
-    is >> ar;
-    is.ignore(3, '\n'); // Ignore " Ft" and newline
-    is.ignore(); // Ignore newline character
+void FelarasJegy::read(std::istream &is)
+{
+  std::string header;
+  Jegy::read(is);
+  std::getline(is, tipus);
+  is >> felar;
+  is.ignore();
 }
 
-// KedvezmenyesJegy class
-void KedvezmenyesJegy::write(std::ostream &os) const {
-    os << "KEDVEZMENYES\n"; // Type identifier
-    Jegy::write(os);
-    os << tipus << "\n" << kedvezmeny << "\n";
-}
-
-void KedvezmenyesJegy::read(std::istream &is) {
-    std::string header;
-    Jegy::read(is);
-    std::getline(is, tipus);
-    is >> kedvezmeny;
-    is.ignore(); // Ignore newline after kedvezmeny
-}
-
-// FelarasJegy class
-void FelarasJegy::write(std::ostream &os) const {
-    os << "FELARAS\n"; // Type identifier
-    Jegy::write(os);
-    os << tipus << "\n" << felar << "\n";
-}
-
-void FelarasJegy::read(std::istream &is) {
-    std::string header;
-    Jegy::read(is);
-    std::getline(is, tipus);
-    is >> felar;
-    is.ignore(); // Ignore newline after felar
-}
-
-KedvezmenyesJegy& KedvezmenyesJegy::operator=(const KedvezmenyesJegy& other) {
-    if (this != &other) {
-        Jegy::operator=(other); // Call base class's assignment operator
-
-        // Copy subclass-specific members
-        tipus = other.tipus;
-        kedvezmeny = other.kedvezmeny;
-    }
-    return *this;
-}
-
-FelarasJegy& FelarasJegy::operator=(const FelarasJegy& other) {
-    if (this != &other) {
-        Jegy::operator=(other); // Call base class's assignment operator
-
-        // Copy subclass-specific members
-        tipus = other.tipus;
-        felar = other.felar;
-    }
-    return *this;
+FelarasJegy::~FelarasJegy()
+{
 }

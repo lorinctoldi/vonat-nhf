@@ -11,13 +11,13 @@ Utvonal::Utvonal(const Utvonal &other) : utvonal_azonosito(other.utvonal_azonosi
 
 Utvonal& Utvonal::operator=(const Utvonal &other)
 {
-    if (this == &other) // Check for self-assignment
+    if (this == &other)
         return *this;
 
-    // Deallocate existing dynamic memory
+
     delete[] allomasok;
 
-    // Copy data from other object
+
     utvonal_azonosito = other.utvonal_azonosito;
     allomasok_szama = other.allomasok_szama;
     allomasok = new Allomas[allomasok_szama];
@@ -95,6 +95,36 @@ void Utvonal::kiir(std::ostream &os) const {
     if(i != allomasok_szama-1) os << "\t|\n";
   }
 }
+
+void Utvonal::write(std::ostream &os) const
+  {
+    os << "===== Utvonal =====\n";
+    os << "utvonal azonosito:\n";
+    os << utvonal_azonosito << '\n';
+    os << "allomasok szama:\n";
+    os << allomasok_szama << '\n';
+    for (size_t i = 0; i < allomasok_szama; ++i)
+    {
+      allomasok[i].write(os);
+    }
+  }
+
+  void Utvonal::read(std::istream &is)
+  {
+    std::string header;
+    std::getline(is, header);
+    std::getline(is, header);
+    is >> utvonal_azonosito;
+    is.ignore();
+    std::getline(is, header);
+    is >> allomasok_szama;
+    is.ignore();
+    allomasok = new Allomas[allomasok_szama];
+    for (size_t i = 0; i < allomasok_szama; ++i)
+    {
+      allomasok[i].read(is);
+    }
+  }
 
 Utvonal::~Utvonal() {
   if(allomasok != nullptr) delete[] allomasok;

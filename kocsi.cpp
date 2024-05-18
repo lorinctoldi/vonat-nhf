@@ -28,5 +28,31 @@ size_t Kocsi::getAzonosito() const {
     return kocsi_azonosito;
 }
 
+ void Kocsi::write(std::ostream &os) const
+  {
+    os << "===== Kocsi =====\n";
+    os << "kocsi azonosito:\n";
+    os << kocsi_azonosito << '\n';
+    os << "szekek szama:\n";
+    os << szekek_szama << '\n';
+    os << "foglalt szekek szama:\n";
+    os << foglalt_szekek_szama << '\n';
+  }
+
+  void Kocsi::read(std::istream &is)
+  {
+    std::string header;
+    std::getline(is, header);
+    std::getline(is, header);
+    is >> kocsi_azonosito;
+    is.ignore();
+    std::getline(is, header);
+    is >> szekek_szama;
+    is.ignore();
+    std::getline(is, header);
+    is >> foglalt_szekek_szama;
+    is.ignore();
+  }
+
 Kocsi::~Kocsi() {
 }

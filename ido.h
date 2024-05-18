@@ -11,7 +11,6 @@ class Ido : public Serializable
 private:
     int ora;
     int perc;
-
 public:
     Ido();
     Ido(int o, int p);
@@ -33,21 +32,11 @@ public:
     bool operator==(const Ido& other) const;
     bool operator!=(const Ido& other) const;
 
-    void write(std::ostream &os) const
-    {
-        os << ora << ' ' << perc << '\n';
-    }
+    void write(std::ostream &os) const;
 
-    void kiir(std::ostream &os) const
-    {
-        os << (ora > 9 ? "" : "0") << ora<< ':' << (perc > 9 ? "" : "0") << perc << '\n';
-    }
+    void kiir(std::ostream &os) const;
 
-    void read(std::istream &is)
-    {
-        is >> ora >> perc;
-        is.ignore();
-    }
+    void read(std::istream &is);
 };
 
 #endif // IDO_H

@@ -49,43 +49,16 @@ public:
 
   void createJegy(std::string indulo, std::string erkezo, int indulo_ora, int indulo_perc, double discountOrFee = 0, const std::string &tipus = "");
 
-  void clear()
-  {
-    if (vonatok_szama > 0)
-    {
-      delete[] vonatok;
-      vonatok = nullptr;
-      vonatok_szama = 0;
-    }
-  }
+  void createVonat();
+
+  void clear();
 
   // Menetrend kiiratasa.
   void kiir(std::ostream &os, std::string indulo, std::string erkezo) const;
 
-  virtual void write(std::ostream &os) const override
-  {
-    os << "===== Menetrend =====\n";
-    os << "Vonatok szama:\n";
-    os << vonatok_szama << '\n';
-    for (size_t i = 0; i < vonatok_szama; ++i)
-    {
-      vonatok[i].write(os);
-    }
-  }
+  virtual void write(std::ostream &os) const override;
 
-  virtual void read(std::istream &is) override
-  {
-    std::string header;
-    std::getline(is, header); // "===== Menetrend ====="
-    std::getline(is, header); // "Vonatok szama:"
-    is >> vonatok_szama;
-    is.ignore(); // Ignore newline character
-    vonatok = new Vonat[vonatok_szama];
-    for (size_t i = 0; i < vonatok_szama; ++i)
-    {
-      vonatok[i].read(is);
-    }
-  }
+  virtual void read(std::istream &is) override;
 
   // Az osztaly destruktora.
   ~Menetrend();

@@ -6,19 +6,17 @@
 
 Allomas::Allomas()
     : allomas_azonosito(0),
-     nev(""),
+      nev(""),
       indulas(0, 0),
       erkezes(0, 0)
-{
-}
+{ }
 
 Allomas::Allomas(const Allomas &other)
     : allomas_azonosito(other.allomas_azonosito),
       nev(other.nev),
       indulas(other.indulas),
       erkezes(other.erkezes)
-{
-}
+{ }
 
 Allomas &Allomas::operator=(const Allomas &other)
 {
@@ -37,8 +35,7 @@ Allomas::Allomas(size_t azonosito, const std::string &nev, int indulas_ora, int 
       nev(nev),
       indulas(indulas_ora, indulas_perc),
       erkezes(erkezes_ora, erkezes_perc)
-{
-}
+{ }
 
 void Allomas::changeErkezes(int ora, int perc)
 {
@@ -80,6 +77,42 @@ std::string &Allomas::getNev()
   return nev;
 }
 
-Allomas::~Allomas()
+Ido &Allomas::getIndulas()
 {
-};
+  return indulas;
+}
+
+Ido &Allomas::getErkezes()
+{
+  return erkezes;
+}
+
+void Allomas::write(std::ostream &os) const
+{
+  os << "===== Allomas =====\n";
+  os << "allomas azonosito:\n";
+  os << allomas_azonosito << '\n';
+  os << "nev:\n";
+  os << nev << '\n';
+  os << "erkezes:\n";
+  erkezes.write(os);
+  os << "indulas:\n";
+  indulas.write(os);
+}
+
+void Allomas::read(std::istream &is)
+{
+  std::string header;
+  std::getline(is, header);
+  std::getline(is, header);
+  is >> allomas_azonosito;
+  is.ignore();
+  std::getline(is, header);
+  std::getline(is, nev);
+  std::getline(is, header);
+  erkezes.read(is);
+  std::getline(is, header);
+  indulas.read(is);
+}
+
+Allomas::~Allomas(){};
