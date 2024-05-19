@@ -598,7 +598,7 @@ void test()
   END
 
   // Menetrend vonat módosításának vizsgálata
-  TEST(MenetrendVonatCsere, Test24)
+  TEST(MenetrendVonatCsere, Test25)
   {
     // menetrend objektum létrehozása
     Menetrend menetrend;
@@ -628,7 +628,7 @@ void test()
   END
 
   // Menetrend osztály perzisztenciájának vizsgálata
-  TEST(MenetrendPerzisztencia, Test25)
+  TEST(MenetrendPerzisztencia, Test26)
   {
     // menetrend objektum létrehozása
     Menetrend menetrend1;

@@ -14,7 +14,7 @@
 // A Jegy osztaly reprezentalja a vonatjegyeket.
 // Tartalmazza a jegy azonositojat, a helyszamot, a kocsi szamat, a vonat szamat,
 // az indulo es a cel allomast, valamint az arat.
-class Jegy
+class Jegy : public Serializable
 {
 protected:
   size_t jegy_azonosito;          // A jegy azonositoja.
