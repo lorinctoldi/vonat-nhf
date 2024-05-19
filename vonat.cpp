@@ -6,15 +6,12 @@ Vonat::Vonat(const Vonat &other)
     : vonat_azonosito(other.vonat_azonosito), kocsik_szama(other.kocsik_szama), jegyek_szama(other.jegyek_szama),
       utvonal(other.utvonal)
 {
-
-  // Deep copy kocsik array
   kocsik = new Kocsi[kocsik_szama];
   for (size_t i = 0; i < kocsik_szama; ++i)
   {
     kocsik[i] = other.kocsik[i];
   }
 
-  // Deep copy jegyek array
   jegyek = new Jegy *[jegyek_szama];
   for (size_t i = 0; i < jegyek_szama; ++i)
   {
@@ -52,32 +49,34 @@ Vonat &Vonat::operator=(const Vonat &other)
     kocsik[i] = other.kocsik[i];
   }
 
-  jegyek = new Jegy *[jegyek_szama];
-  for (size_t i = 0; i < jegyek_szama; ++i)
-  {
-    if (dynamic_cast<KedvezmenyesJegy *>(other.jegyek[i]))
+  if(jegyek_szama > 0) {
+    jegyek = new Jegy *[jegyek_szama];
+    for (size_t i = 0; i < jegyek_szama; ++i)
     {
-      jegyek[i] = new KedvezmenyesJegy(*dynamic_cast<KedvezmenyesJegy *>(other.jegyek[i]));
-    }
-    else if (dynamic_cast<FelarasJegy *>(other.jegyek[i]))
-    {
-      jegyek[i] = new FelarasJegy(*dynamic_cast<FelarasJegy *>(other.jegyek[i]));
-    }
-    else
-    {
-      jegyek[i] = new Jegy(*other.jegyek[i]);
+      if (dynamic_cast<KedvezmenyesJegy *>(other.jegyek[i]))
+      {
+        jegyek[i] = new KedvezmenyesJegy(*dynamic_cast<KedvezmenyesJegy *>(other.jegyek[i]));
+      }
+      else if (dynamic_cast<FelarasJegy *>(other.jegyek[i]))
+      {
+        jegyek[i] = new FelarasJegy(*dynamic_cast<FelarasJegy *>(other.jegyek[i]));
+      }
+      else
+      {
+        jegyek[i] = new Jegy(*other.jegyek[i]);
+      }
     }
   }
 
   return *this;
 }
 
-Vonat::Vonat(size_t azonosito, size_t kocsik_sz, Kocsi *kocsik_ptr, Utvonal utv, size_t jegyek_sz, Jegy **jegyek_ptr)
+Vonat::Vonat(size_t azonosito, size_t kocsik_sz, Kocsi kocsik_tomb[], Utvonal utv, size_t jegyek_sz, Jegy **jegyek_ptr)
     : vonat_azonosito(azonosito), kocsik_szama(kocsik_sz), kocsik(new Kocsi[kocsik_sz]), jegyek(new Jegy *[jegyek_sz]), jegyek_szama(jegyek_sz), utvonal(utv)
 {
   for (size_t i = 0; i < kocsik_sz; ++i)
   {
-    kocsik[i] = kocsik_ptr[i];
+    kocsik[i] = kocsik_tomb[i];
   }
 
   for (size_t i = 0; i < jegyek_sz; ++i)

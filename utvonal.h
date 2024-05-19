@@ -6,49 +6,67 @@
 #include "memtrace.h"
 #include "serializable.h"
 
-// Az Utvonal osztaly az egyes vonatutvonalakat reprezentalja.
-// Tartalmazza az utvonal azonositojat, az allomasok szamat, valamint az allomasokat.
+// Az Útvonal osztály az egyes vonatútvonalakat reprezentálja.
+// Tartalmazza az útvonal azonosítóját, az állomások számát, valamint az állomásokat.
 class Utvonal : public Serializable
 {
-  size_t utvonal_azonosito; // Az utvonal azonositoja
-  size_t allomasok_szama;   // Az allomasok szama az utvonalon
-  Allomas *allomasok;       // Az allomasok tombje az utvonalon.
+  size_t utvonal_azonosito; // Az útvonal azonosítója
+  size_t allomasok_szama;   // Az állomások száma az útvonalon
+  Allomas *allomasok;       // Az állomások tömbje az útvonalon
 public:
-  // Az osztaly alapertelmezett konstruktora.
+  // Az osztály alapértelmezett konstruktora.
   Utvonal();
 
-  // Az osztaly masolo konstruktora.
-  // @param other - masolni kivant Utvonal objektum
+  // Az osztály másoló konstruktora.
+  // @param other - másolni kívánt Utvonal objektum
   Utvonal(const Utvonal &other);
 
-  // Allomas hozzaadasa az utvonalhoz.
-  // @param allomas - hozzaadni kivant allomas
+  // Állomás hozzáadása az útvonalhoz.
+  // @param allomas - hozzáadni kívánt állomás
   void addAllomas(Allomas allomas);
 
+  // Új állomás létrehozása az útvonalon.
+  // @param nev - az állomás neve
+  // @param erkezes_ora - az állomásra érkező vonat óra
+  // @param erkezes_perc - az állomásra érkező vonat perc
+  // @param indulas_óra - az állomásról induló vonat óra
+  // @param indulas_perc - az állomásról induló vonat perc
   void createAllomas(std::string nev, int erkezes_ora, int erkezes_perc, int indulas_ora, int indulas_perc);
 
+  // Az útvonal értékadás operátora.
+  // @param other - másolni kívánt Utvonal objektum
   Utvonal &operator=(const Utvonal &other);
 
-  // Allomas csereje az utvonalon.
-  // @param index - az allomas indexe, amelyet cserelni kivanunk
-  // @param allomas - beszurni kivant allomas
+  // Állomás cseréje az útvonalon.
+  // @param index - az állomás indexe, amelyet cserélni kívánunk
+  // @param allomas - beszúrni kívánt állomás
   void changeAllomas(size_t index, Allomas allomas);
 
-  // Allomas eltavolitasa az utvonalrol.
-  // @param index - az eltavolitani kivant allomas indexe
+  // Állomás eltávolítása az útvonalról.
+  // @param index - az eltávolítani kívánt állomás indexe
   void removeAllomas(size_t index);
 
+  // Az útvonalon található állomások számának lekérdezése.
   size_t getAllomasokSzama() const;
 
-  Allomas& getAllomas(size_t i) const;
+  // Visszaad egy kívánt számú állomást a listából az index alapján.
+  // @param i - az állomás indexe
+  // @return Az állomás referenciája az adott indexen
+  Allomas &getAllomas(size_t i) const;
 
+  // Az útvonal kiírása az adott output streamre, az UI használatához.
+  // @param os - az output stream
   void kiir(std::ostream &os) const;
 
+  // Az útvonal perzisztencia kiiró függvénye, amely az objektum állapotát írja ki a megadott output streambe.
+  // @param os - az output stream
   void write(std::ostream &os) const;
 
+  // Az útvonal perzisztencia beolvasó függvénye, amely az objektum állapotát olvassa be a megadott input streamből és elkészíti saját magát.
+  // @param is - az input stream
   void read(std::istream &is);
 
-  // Az osztaly destruktora.
+  // Az osztály destruktora.
   ~Utvonal();
 };
 

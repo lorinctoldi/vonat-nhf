@@ -32,11 +32,11 @@ public:
     // Egyedi konstruktor.
     // @param azonosito - a vonat azonosítója
     // @param kocsik_sz - a vonathoz tartozó kocsik száma
-    // @param kocsik_ptr - a kocsik tömbjére mutató pointer
+    // @param kocsik_tomb - a kocsik tömbje
     // @param utv - az útvonal, amelyhez a vonat tartozik
     // @param jegyek_sz - a vonathoz tartozó jegyek száma
     // @param jegyek_ptr - a jegyek tömbjére mutató pointer
-    Vonat(size_t azonosito, size_t kocsik_sz, Kocsi *kocsik_ptr, Utvonal utv, size_t jegyek_sz, Jegy **jegyek_ptr);
+    Vonat(size_t azonosito, size_t kocsik_sz, Kocsi kocsik_tomb[], Utvonal utv, size_t jegyek_sz, Jegy **jegyek_ptr);
 
     // Azonosító lekérdezése.
     // @return A vonat azonosítója.

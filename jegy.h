@@ -145,11 +145,11 @@ public:
 
   // Kiiratas operator.
   // @param os - a kimeneti stream, amire kiirjuk a FelarasJegy adatait
-  void kiir(std::ostream &os) const override;
+  void kiir(std::ostream &os) const;
 
-  void write(std::ostream &os) const override;
+  void write(std::ostream &os) const;
 
-  void read(std::istream &is) override;
+  void read(std::istream &is);
 
   ~FelarasJegy();
 };

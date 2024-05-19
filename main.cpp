@@ -5,6 +5,7 @@
 #include "ido.h"
 #include "allomas.h"
 #include "kocsi.h"
+#include "test.h"
 
 #include <iostream>
 #include <sstream>
@@ -14,6 +15,7 @@
 
 int main()
 {
+    test();
     Menetrend m;
     bool kilepes = false;
 

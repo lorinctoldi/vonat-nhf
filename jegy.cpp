@@ -177,6 +177,9 @@ void KedvezmenyesJegy::write(std::ostream &os) const
 void KedvezmenyesJegy::read(std::istream &is)
 {
   std::string header;
+  std::getline(is, header);
+  if (header == "KEDVEZMENYES")
+    std::getline(is, header);
   Jegy::read(is);
   std::getline(is, tipus);
   is >> kedvezmeny;
@@ -234,6 +237,9 @@ void FelarasJegy::write(std::ostream &os) const
 void FelarasJegy::read(std::istream &is)
 {
   std::string header;
+  std::getline(is, header);
+  if (header == "FELARAS")
+    std::getline(is, header);
   Jegy::read(is);
   std::getline(is, tipus);
   is >> felar;

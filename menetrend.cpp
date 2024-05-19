@@ -27,6 +27,9 @@ void Menetrend::addVonat(Vonat v)
 
 void Menetrend::changeVonat(Vonat v, size_t index)
 {
+  if (index >= vonatok_szama)
+    throw "Nincs ilyen szamu vonat";
+  v.setAzonosito(index);
   vonatok[index] = v;
 }
 
@@ -35,48 +38,59 @@ Vonat &Menetrend::getVonat(size_t index) const
   return vonatok[index];
 }
 
-size_t Menetrend::getVonatokSzama() const {
+size_t Menetrend::getVonatokSzama() const
+{
   return vonatok_szama;
 }
 
-void Menetrend::removeVonat(size_t index) {
-  if (index >= vonatok_szama) {
-        std::cerr << "Index out of range." << std::endl;
-        return;
-    }
+void Menetrend::removeVonat(size_t index)
+{
+  if (index >= vonatok_szama)
+  {
+    std::cerr << "Index out of range." << std::endl;
+    return;
+  }
 
-    for (size_t i = index; i < vonatok_szama - 1; ++i) {
-        vonatok[i] = vonatok[i + 1];
-    }
+  for (size_t i = index; i < vonatok_szama - 1; ++i)
+  {
+    vonatok[i] = vonatok[i + 1];
+  }
 
-    vonatok_szama--;
+  vonatok_szama--;
 
-    Vonat* temp_vonatok = new Vonat[vonatok_szama];
-    
-    for (size_t i = 0; i < vonatok_szama; ++i) {
-        temp_vonatok[i] = vonatok[i];
-    }
-    
-    delete[] vonatok;
+  Vonat *temp_vonatok = new Vonat[vonatok_szama];
 
-    vonatok = temp_vonatok;
+  for (size_t i = 0; i < vonatok_szama; ++i)
+  {
+    temp_vonatok[i] = vonatok[i];
+  }
+
+  delete[] vonatok;
+
+  vonatok = temp_vonatok;
 }
 
-void Menetrend::createJegy(std::string indulo, std::string erkezo, int indulo_ora, int indulo_perc, double discountOrFee, const std::string &tipus) {
-  if(vonatok_szama == 0) throw "Nincsenek vonatok a rendszerben.";
+void Menetrend::createJegy(std::string indulo, std::string erkezo, int indulo_ora, int indulo_perc, double discountOrFee, const std::string &tipus)
+{
+  if (vonatok_szama == 0)
+    throw "Nincsenek vonatok a rendszerben.";
   size_t leghamarabb_indulo_vonat = -1;
   int min_ido = -1;
-  for(size_t i = 0; i < vonatok_szama; ++i) {
-    if(!vonatok[i].routeExists(indulo, erkezo)) continue;
+  for (size_t i = 0; i < vonatok_szama; ++i)
+  {
+    if (!vonatok[i].routeExists(indulo, erkezo))
+      continue;
     int t = vonatok[i].indulasiIdoKulonbseg(indulo, indulo_ora, indulo_perc);
 
-    if((min_ido == -1 && t != -1) || (min_ido != -1 && t < min_ido)) {
+    if ((min_ido == -1 && t != -1) || (min_ido != -1 && t < min_ido))
+    {
       min_ido = t;
       leghamarabb_indulo_vonat = i;
     }
   }
 
-  if(leghamarabb_indulo_vonat == -1) {
+  if (leghamarabb_indulo_vonat == -1)
+  {
     throw "nem talalt vonatot";
     return;
   }
@@ -86,15 +100,14 @@ void Menetrend::createJegy(std::string indulo, std::string erkezo, int indulo_or
 }
 
 void Menetrend::clear()
+{
+  if (vonatok_szama > 0)
   {
-    if (vonatok_szama > 0)
-    {
-      delete[] vonatok;
-      vonatok = nullptr;
-      vonatok_szama = 0;
-    }
+    delete[] vonatok;
+    vonatok = nullptr;
+    vonatok_szama = 0;
   }
-
+}
 
 void Menetrend::kiir(std::ostream &os, std::string indulo = "", std::string erkezo = "") const
 {
@@ -104,14 +117,15 @@ void Menetrend::kiir(std::ostream &os, std::string indulo = "", std::string erke
   {
     size_t induloIndex = vonatok[i].findAllomas(indulo);
     size_t erkezoIndex = vonatok[i].findAllomas(erkezo);
-    if(!vonatok[i].routeExists(indulo, erkezo) && induloIndex == -1 && erkezoIndex == -1 && (!indulo.empty() && !erkezo.empty())) continue;
+    if (!vonatok[i].routeExists(indulo, erkezo) && induloIndex == -1 && erkezoIndex == -1 && (!indulo.empty() && !erkezo.empty()))
+      continue;
 
     talalt = true;
     Utvonal u = vonatok[i].getUtvonal();
 
     if ((indulo.empty() || (induloIndex != -1)) && (erkezo.empty() || (erkezoIndex != -1)))
     {
-      os << "Vonat " << vonatok[i].getAzonosito()+1 << " :\n";
+      os << "Vonat " << vonatok[i].getAzonosito() + 1 << " :\n";
 
       if ((induloIndex != -1) && (erkezoIndex != -1) && induloIndex < erkezoIndex)
       {
@@ -178,33 +192,34 @@ void Menetrend::kiir(std::ostream &os, std::string indulo = "", std::string erke
       }
     }
   }
-  if(!talalt) os << "A megadott allomasok kozott vonat nem kozlekedik.\n";
+  if (!talalt)
+    os << "A megadott allomasok kozott vonat nem kozlekedik.\n";
 }
 
 void Menetrend::write(std::ostream &os) const
+{
+  os << "===== Menetrend =====\n";
+  os << "Vonatok szama:\n";
+  os << vonatok_szama << '\n';
+  for (size_t i = 0; i < vonatok_szama; ++i)
   {
-    os << "===== Menetrend =====\n";
-    os << "Vonatok szama:\n";
-    os << vonatok_szama << '\n';
-    for (size_t i = 0; i < vonatok_szama; ++i)
-    {
-      vonatok[i].write(os);
-    }
+    vonatok[i].write(os);
   }
+}
 
-  void Menetrend::read(std::istream &is)
+void Menetrend::read(std::istream &is)
+{
+  std::string header;
+  std::getline(is, header);
+  std::getline(is, header);
+  is >> vonatok_szama;
+  is.ignore();
+  vonatok = new Vonat[vonatok_szama];
+  for (size_t i = 0; i < vonatok_szama; ++i)
   {
-    std::string header;
-    std::getline(is, header);
-    std::getline(is, header);
-    is >> vonatok_szama;
-    is.ignore();
-    vonatok = new Vonat[vonatok_szama];
-    for (size_t i = 0; i < vonatok_szama; ++i)
-    {
-      vonatok[i].read(is);
-    }
+    vonatok[i].read(is);
   }
+}
 
 Menetrend::~Menetrend()
 {
