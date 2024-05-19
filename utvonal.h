@@ -3,8 +3,11 @@
 
 #include "allomas.h"
 
-#include "memtrace.h"
+// Interfész az objektumok sorosításához és deszerializálásához.
 #include "serializable.h"
+
+// Memória helyes használatának ellőrzéséhez.
+#include "memtrace.h"
 
 // Az Útvonal osztály az egyes vonatútvonalakat reprezentálja.
 // Tartalmazza az útvonal azonosítóját, az állomások számát, valamint az állomásokat.
@@ -54,16 +57,16 @@ public:
   // @return Az állomás referenciája az adott indexen
   Allomas &getAllomas(size_t i) const;
 
-  // Az útvonal kiírása az adott output streamre, az UI használatához.
-  // @param os - az output stream
+  // Objektum kiírása adatfolyamba esztétikus formában.
+  // @param os - Az írásra használt kimeneti adatfolyam.
   void kiir(std::ostream &os) const;
 
-  // Az útvonal perzisztencia kiiró függvénye, amely az objektum állapotát írja ki a megadott output streambe.
-  // @param os - az output stream
+  // Serializable interfész implementációja: objektum írása adatfolyamba.
+  // @param os - Az írásra használt kimeneti adatfolyam.
   void write(std::ostream &os) const;
 
-  // Az útvonal perzisztencia beolvasó függvénye, amely az objektum állapotát olvassa be a megadott input streamből és elkészíti saját magát.
-  // @param is - az input stream
+  // Serializable interfész implementációja: objektum olvasása adatfolyamból.
+  // @param is - A beolvasásra használt bemeneti adatfolyam.
   void read(std::istream &is);
 
   // Az osztály destruktora.

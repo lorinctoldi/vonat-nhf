@@ -1,12 +1,17 @@
 #ifndef IDO_H
 #define IDO_H
 
+// Szabványos bemenet és kimenet kezeléséhez.
 #include <iostream>
+
+// Interfész az objektumok sorosításához és deszerializálásához.
 #include "serializable.h"
 
 // Memória helyes használatának ellőrzéséhez.
 #include "memtrace.h"
 
+// Az Idő osztály reprezentál egy időpontot.
+// Tartalmazza az időpontot alkotó órát és percet.
 class Ido : public Serializable
 {
 private:
@@ -61,7 +66,7 @@ public:
 
     // Nem egyenlőség operátor.
     // @param other - A másik idő, amivel a nem egyenlőség vizsgálat történik.
-    // @return Igaz, ha az idők nem egyeznek meg, különben hamis.
+    // @return igaz, ha az idők nem egyeznek meg, különben hamis.
     bool operator!=(const Ido &other) const;
 
     // Objektum kiírása adatfolyamba esztétikus formában.
