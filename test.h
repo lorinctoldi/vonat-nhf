@@ -1,6 +1,7 @@
 #ifndef TEST_H_
 #define TEST_H_
 
+// teszteléshez használt osztályok
 #include "menetrend.h"
 #include "vonat.h"
 #include "jegy.h"
@@ -9,18 +10,17 @@
 #include "allomas.h"
 #include "kocsi.h"
 
-#include <iostream>
+// perzisztencia vizsgálatához
 #include <sstream>
-#include <fstream>
 
+// memória helyes használatának ellőrzéséhez
 #include "memtrace.h"
+// teszteléshez használt makrók
 #include "gtest_lite.h"
 
-using std::cerr;
-using std::cin;
-using std::cout;
-using std::endl;
-
+// Programhoz tartozó teszteket futtató függvény
+// @param void
+// @return void
 void test();
 
 #endif /* TEST_H_ */

@@ -1,5 +1,8 @@
 #include "test.h"
 
+// Programhoz tartozó teszteket futtató függvény
+// @param void
+// @return void
 void test()
 {
   // Idő osztály kiiírás funkciójánák vizsgálata
@@ -394,6 +397,8 @@ void test()
 
     // Útvonal létrehozása ás állomások hozzáadása
     Utvonal utvonal;
+
+    // állomások létrehozása az útvonalon
     utvonal.createAllomas("Budapest", 8, 0, 10, 30);
     utvonal.createAllomas("Debrecen", 12, 0, 14, 45);
 
@@ -488,6 +493,7 @@ void test()
 
     // StringStream létrehozása
     std::stringstream ss;
+
     // jegy kiírása StringStream-be
     jegy1.write(ss);
 
@@ -502,106 +508,155 @@ void test()
   }
   END
 
-  TEST(JegyTest, Test21)
+  // Felarasjegy osztály perzisztenciájának vizsgálata
+  TEST(FelarasjegyPerzisztencia, Test21)
   {
+    // idő objektumok létrehozása paraméteres konstruktorokkal
     Ido indulo_ido(8, 0);
     Ido cel_ido(10, 30);
 
+    // felarasjegy létrehozása
     FelarasJegy jegy1(1, 12, 2, 3, "Budapest", indulo_ido, "Debrecen", cel_ido, 0.4, "jegy");
 
+    // StringStream létrehozása
     std::stringstream ss;
+
+    // jegy kiírása StringStream-be
     jegy1.write(ss);
 
+    // jegy létrehozása beolvasáshoz
     FelarasJegy jegy2;
+
+    // jegy beolvasása StringStream-ből
     jegy2.read(ss);
 
+    // jegyek egyezésének vizsgálata
     EXPECT_TRUE(jegy1 == jegy2);
   }
   END
 
-  TEST(JegyTest, Serialization)
+  // Kedvezmenyesjegy osztály perzisztenciájának vizsgálata
+  TEST(KedvezmenyesjegyPerzisztencia, Test22)
   {
+    // idő objektumok létrehozása paraméteres konstruktorokkal
     Ido indulo_ido(8, 0);
     Ido cel_ido(10, 30);
 
+    // kedvezmenyesjegy létrehozása
     KedvezmenyesJegy jegy1(1, 12, 2, 3, "Budapest", indulo_ido, "Debrecen", cel_ido, 0.4, "jegy");
 
+    // StringStream létrehozása
     std::stringstream ss;
+
+    // jegy kiírása StringStream-be
     jegy1.write(ss);
 
-    KedvezmenyesJegy jegy2;
+    // jegy létrehozása beolvasáshoz
+    FelarasJegy jegy2;
+
+    // jegy beolvasása StringStream-ből
     jegy2.read(ss);
 
+    // jegyek egyezésének vizsgálata
     EXPECT_TRUE(jegy1 == jegy2);
   }
   END
 
-  TEST(MenetrendTest, DefaultConstructor)
+  // Állomás konstruktorának vizsgálata
+  TEST(MenetrendKonstruktor, Test23)
   {
+    // menetrend objektum létrehozása
     Menetrend menetrend;
+
+    // paraméterek helyes beállítottságának vizsgálata
     EXPECT_EQ(0, menetrend.getVonatokSzama());
   }
   END
 
-  // Menetrend vonat hozzáadásának vizsgálata
-  TEST(MenetrendTest, AddVonat)
+  // Menetrend vonat hozzáadó függvényének vizsgálata
+  TEST(MenetrendVonatHozzaadas, Test24)
   {
+    // menetrend objektum létrehozása
     Menetrend menetrend;
 
-    // Vonat objektum létrehozása
+    // útvonal objektum létrehozása
     Utvonal utvonal;
+
+    // állomások létrehozása az útvonalon
     utvonal.createAllomas("Budapest", 8, 0, 10, 30);
     utvonal.createAllomas("Debrecen", 12, 0, 14, 45);
+
+    // vonat lérehozása az útvonallal
     Vonat vonat(1, 0, nullptr, utvonal, 0, nullptr);
 
+    // vonat hozzáadása a menetrendhez
     menetrend.addVonat(vonat);
 
+    // vonat hozzáadásának ellenőrzése
     EXPECT_EQ(1, menetrend.getVonatokSzama());
   }
   END
 
   // Menetrend vonat módosításának vizsgálata
-  TEST(MenetrendTest, ChangeVonat)
+  TEST(MenetrendVonatCsere, Test24)
   {
+    // menetrend objektum létrehozása
     Menetrend menetrend;
 
+    // útvonal objektumok létrehozása
     Utvonal utvonal1, utvonal2;
+
+    // állomások létrehozása az útvonalon
     utvonal1.createAllomas("Budapest", 8, 0, 10, 30);
     utvonal1.createAllomas("Debrecen", 12, 0, 14, 45);
     utvonal2.createAllomas("Miskolc", 9, 0, 11, 30);
     utvonal2.createAllomas("Szeged", 13, 0, 15, 45);
+
+    // vonatok lérehozása az útvonallal
     Vonat vonat1(1, 0, nullptr, utvonal1, 0, nullptr);
     Vonat vonat2(2, 0, nullptr, utvonal2, 0, nullptr);
 
+    // vonat hozzáadása a menetrendhez
     menetrend.addVonat(vonat1);
+
+    // hozzáadott vonat cseréje
     menetrend.changeVonat(vonat2, 0);
 
+    // vonat cseréjének ellenőrzése
     EXPECT_EQ(1, menetrend.getVonatokSzama());
   }
   END
 
-  // Menetrend perzisztenciájának vizsgálata
-  TEST(MenetrendTest, Persistency)
+  // Menetrend osztály perzisztenciájának vizsgálata
+  TEST(MenetrendPerzisztencia, Test25)
   {
-    // Menetrend objet
+    // menetrend objektum létrehozása
     Menetrend menetrend1;
 
-    // Vonat objektum létrehozása
+    // útvonal objektum létrehozása
     Utvonal utvonal;
+
+    // állomások létrehozása az útvonalon
     utvonal.createAllomas("Budapest", 8, 0, 10, 30);
     utvonal.createAllomas("Debrecen", 12, 0, 14, 45);
+
+    // vonat lérehozása az útvonallal
     Vonat vonat(1, 0, nullptr, utvonal, 0, nullptr);
 
+    // vonat hozzáadása a menetrendhez
     menetrend1.addVonat(vonat);
 
     // Menetrend kiírása StringStream-be
     std::stringstream ss;
+    // menetrend kiírása StringStream-be
     menetrend1.write(ss);
 
     // Menetrend objektum létrehozása beolvasáshoz
     Menetrend menetrend2;
+    // menetrend beolvasása StringStream-ből
     menetrend2.read(ss);
 
+    // menetrendek egyezésének vizsgálata
     EXPECT_EQ(menetrend1.getVonatokSzama(), menetrend2.getVonatokSzama());
     EXPECT_EQ(menetrend1.getVonat(0).getAzonosito(), menetrend2.getVonat(0).getAzonosito());
   }
