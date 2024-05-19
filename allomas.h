@@ -1,81 +1,96 @@
 #ifndef ALLOMAS_H
 #define ALLOMAS_H
 
+// Idő tárolásához.
 #include "ido.h"
 
+// Szabványos bemenet és kimenet kezeléséhez.
 #include <iostream>
 
+// Memória helyes használatának ellőrzéséhez.
 #include "memtrace.h"
+
+// Interfész az objektumok sorosításához és deszerializálásához.
 #include "serializable.h"
 
+// Az Allomas osztály definíciója.
 class Allomas : public Serializable
 {
-  size_t allomas_azonosito; // Az allomas azonositoja.
-  std::string nev;          // Az allomas neve.
-  Ido indulas;              // Az indulasi idopontjanak taroloja.
-  Ido erkezes;              // Az erkezesi idopontjanak taroloja.
+  size_t allomas_azonosito; // Az állomás azonosítója.
+  std::string nev;          // Az állomás neve.
+  Ido indulas;              // Az indulási időpont tárolója.
+  Ido erkezes;              // Az érkezési időpont tárolója.
 public:
-  // Az osztaly alapertelmezett konstruktora.
+  // Az osztály alapértelmezett konstruktora.
   Allomas();
 
-  // Masolo konstruktor.
-  // @param other - masolni kivant Allomas objektum
+  // Másoló konstruktor.
+  // @param other - Másolni kívánt Allomas objektum.
   Allomas(const Allomas &other);
 
+  // Értékadó operátor.
   Allomas &operator=(const Allomas &other);
 
   // Egyedi konstruktor.
-  // @param azonosito - az allomas azonositoja
-  // @param nev - az allomas neve
-  // @param indulas_ora - az indulasi ora
-  // @param indulas_perc - az indulasi perc
-  // @param erkezes_ora - az erkezesi ora
-  // @param erkezes_perc - az erkezesi perc
+  // @param azonosito - Az állomás azonosítója.
+  // @param nev - Az állomás neve.
+  // @param erkezes_ora - Az érkezés órája.
+  // @param erkezes_perc - Az érkezés perce.
+  // @param indulas_ora - Az indulás órája.
+  // @param indulas_perc - Az indulás perce.
   Allomas(size_t azonosito, const std::string &nev, int erkezes_ora, int erkezes_perc, int indulas_ora, int indulas_perc);
 
-  // Az erkezesi ido modositasa.
-  // @param ora - az uj erkezesi ora
-  // @param perc - az uj erkezesi perc
+  // Az érkezés idejének módosítása.
+  // @param ora - Az új érkezés órája.
+  // @param perc - Az új érkezés perce.
   void changeErkezes(int ora, int perc);
 
-  // Az indulasi ido modositasa.
-  // @param ora - az uj indulasi ora
-  // @param perc - az uj indulasi perc
+  // Az indulás idejének módosítása.
+  // @param ora - Az új indulás órája.
+  // @param perc - Az új indulás perce.
   void changeIndulas(int ora, int perc);
 
-  // Az allomas nevenek modositasa.
-  // @param other - az uj nev
+  // Az állomás nevének módosítása.
+  // @param other - Az új név.
   void changeNev(const std::string &other);
 
-  // Az indulasi ora lekerdezese.
-  // @return Az indulasi ora
+  // Az indulás órájának lekérdezése.
+  // @return Az indulás órája.
   int getIndulasOra();
 
-  // Az indulasi perc lekerdezese.
-  // @return Az indulasi perc
+  // Az indulás percének lekérdezése.
+  // @return Az indulás perce.
   int getIndulasPerc();
 
-  // Az erkezesi ora lekerdezese.
-  // @return Az erkezesi ora
+  // Az érkezés órájának lekérdezése.
+  // @return Az érkezés órája.
   int getErkezesOra();
 
-  // Az erkezesi perc lekerdezese.
-  // @return Az erkezesi perc
+  // Az érkezés percének lekérdezése.
+  // @return Az érkezés perce.
   int getErkezesPerc();
 
-  Ido& getIndulas();
+  // Az indulási idő referenciájának lekérdezése.
+  // @return Az indulás idejének referenciája.
+  Ido &getIndulas();
 
-  Ido& getErkezes();
+  // Az érkezési idő referenciájának lekérdezése.
+  // @return Az érkezés idejének referenciája.
+  Ido &getErkezes();
 
-  // Az allomas nevenek lekerdezese.
-  // @return Az allomas neve
+  // Az állomás névének lekérdezése.
+  // @return Az állomás neve.
   std::string &getNev();
 
+  // Serializable interfész implementációja: objektum írása adatfolyamba.
+  // @param os - Az írásra használt kimeneti adatfolyam.
   void write(std::ostream &os) const;
 
+  // Serializable interfész implementációja: objektum olvasása adatfolyamból.
+  // @param is - A beolvasásra használt bemeneti adatfolyam.
   void read(std::istream &is);
 
-  // Az osztaly destruktora.
+  // Az osztály destruktora.
   ~Allomas();
 };
 
