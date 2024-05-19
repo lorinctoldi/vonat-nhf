@@ -134,7 +134,7 @@ public:
   // @param is - A beolvasásra használt bemeneti adatfolyam.
   void read(std::istream &is);
 
-  // Az osztaly destruktora.
+  // Az osztály destruktora.
   ~KedvezmenyesJegy();
 };
 

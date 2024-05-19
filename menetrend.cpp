@@ -1,7 +1,5 @@
 #include "menetrend.h"
 
-#include <iostream>
-
 Menetrend::Menetrend(Vonat v)
 {
   vonatok_szama = 1;

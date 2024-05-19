@@ -80,7 +80,7 @@ void Jegy::kiir(std::ostream &os) const
 
 void Jegy::write(std::ostream &os) const
 {
-  os << "JEGY\n"; // Type identifier
+  os << "JEGY\n";
   os << "===== Jegy =====\n"
      << "jegy azonosito:\n"
      << jegy_azonosito << "\n"
