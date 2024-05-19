@@ -49,8 +49,6 @@ public:
 
   void createJegy(std::string indulo, std::string erkezo, int indulo_ora, int indulo_perc, double discountOrFee = 0, const std::string &tipus = "");
 
-  void createVonat();
-
   void clear();
 
   // Menetrend kiiratasa.

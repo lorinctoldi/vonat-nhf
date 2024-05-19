@@ -30,20 +30,26 @@ Allomas &Allomas::operator=(const Allomas &other)
   return *this;
 }
 
-Allomas::Allomas(size_t azonosito, const std::string &nev, int indulas_ora, int indulas_perc, int erkezes_ora, int erkezes_perc)
+Allomas::Allomas(size_t azonosito, const std::string &nev, int erkezes_ora, int erkezes_perc, int indulas_ora, int indulas_perc)
     : allomas_azonosito(azonosito),
       nev(nev),
       indulas(indulas_ora, indulas_perc),
       erkezes(erkezes_ora, erkezes_perc)
-{ }
+{
+  if(indulas_ora < erkezes_ora || (erkezes_ora == indulas_ora && indulas_perc < erkezes_perc)) throw "Az indulas nem tortenhet elobb mint az erkezes!";
+}
 
 void Allomas::changeErkezes(int ora, int perc)
 {
+  int indulas_ora = indulas.getOra(), indulas_perc = indulas.getPerc();
+  if(indulas_ora < ora || (ora == indulas_ora && indulas_perc < perc)) throw "Az indulas nem tortenhet elobb mint az erkezes!";
   erkezes.setIdo(ora, perc);
 }
 
 void Allomas::changeIndulas(int ora, int perc)
 {
+  int erkezes_ora = erkezes.getOra(), erkezes_perc = erkezes.getPerc();
+  if(erkezes_ora > ora || (ora == erkezes_ora && erkezes_perc > perc)) throw "Az erkezes nem tortenhet kesobb mint az indulas!";
   indulas.setIdo(ora, perc);
 }
 

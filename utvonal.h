@@ -25,7 +25,7 @@ public:
   // @param allomas - hozzaadni kivant allomas
   void addAllomas(Allomas allomas);
 
-  void createAllomas(std::string nev,  int indulas_ora, int indulas_perc, int erkezes_ora, int erkezes_perc);
+  void createAllomas(std::string nev, int erkezes_ora, int erkezes_perc, int indulas_ora, int indulas_perc);
 
   Utvonal &operator=(const Utvonal &other);
 

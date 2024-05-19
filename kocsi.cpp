@@ -15,9 +15,8 @@ bool Kocsi::tele() const {
 size_t Kocsi::reserveHely() {
     if(tele())
         throw "A kocsi tele van";
-    else
-        return foglalt_szekek_szama++;
-    return -1;
+
+    return foglalt_szekek_szama++;
 }
 
 size_t Kocsi::getSzekek_szama() const {

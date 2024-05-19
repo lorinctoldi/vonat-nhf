@@ -65,8 +65,8 @@ void Jegy::kiir(std::ostream &os) const
 {
   os << "===== JEGY =====\n"
      << "azonosito: " << jegy_azonosito << "\n"
-     << "vonat szama: " << vonat_szam << "\n"
-     << "kocsi szam: " << kocsi_szam << "\n"
+     << "vonat szama: " << vonat_szam+1 << "\n"
+     << "kocsi szam: " << kocsi_szam+1 << "\n"
      << "hely szam: " << helyszam << "\n"
      << "----------------\n"
      << indulo_nev << " - " << cel_nev << "\n"

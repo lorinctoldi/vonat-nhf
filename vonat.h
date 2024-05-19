@@ -46,6 +46,8 @@ public:
     // @return Az útvonal, amelyhez a vonat tartozik.
     Utvonal getUtvonal() const;
 
+    void setAzonosito(size_t azonosito);
+
     // Útvonal beállítása.
     // @param utvonal - az útvonal, amelyhez a vonat tartozik
     void setUtvonal(const Utvonal &utvonal);

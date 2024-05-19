@@ -31,7 +31,7 @@ public:
   // @param indulas_perc - az indulasi perc
   // @param erkezes_ora - az erkezesi ora
   // @param erkezes_perc - az erkezesi perc
-  Allomas(size_t azonosito, const std::string &nev, int indulas_ora, int indulas_perc, int erkezes_ora, int erkezes_perc);
+  Allomas(size_t azonosito, const std::string &nev, int erkezes_ora, int erkezes_perc, int indulas_ora, int indulas_perc);
 
   // Az erkezesi ido modositasa.
   // @param ora - az uj erkezesi ora

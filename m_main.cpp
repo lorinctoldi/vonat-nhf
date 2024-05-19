@@ -240,8 +240,8 @@ void test_9()
 
 void test_10()
 {
-    Allomas allomas1(1, "Budapest", 8, 9, 10, 30);
-    Allomas allomas2(2, "Debrecen", 12, 0, 14, 30);
+    Allomas allomas1(1, "Budapest", 10, 30, 8, 9);
+    Allomas allomas2(2, "Debrecen", 14, 30, 12, 0);
 
     Kocsi kocsi1(1, 50);
 
@@ -276,7 +276,6 @@ void test_10()
         deserializedVonat.read(inFile);
         inFile.close();
 
-        // Print the original and deserialized Vonat objects
         std::cout << "Original Vonat:" << std::endl;
         vonat1.write(std::cout);
         std::cout << "\n\nDeserialized Vonat:" << std::endl;
@@ -289,10 +288,10 @@ void test_10()
 }
 
 void test_11() {
-    Allomas allomas1(1, "Budapest", 8, 9, 8, 12);
-    Allomas allomas2(1, "Hargita", 9, 10, 9, 12);
-    Allomas allomas3(1, "Teknoshat", 10, 30, 10, 32);
-    Allomas allomas4(2, "Debrecen", 12, 0, 12, 6);
+    Allomas allomas1(1, "Budapest", 8, 12, 8, 9);
+    Allomas allomas2(1, "Hargita", 9, 12, 9, 10);
+    Allomas allomas3(1, "Teknoshat", 10, 32, 10, 30);
+    Allomas allomas4(2, "Debrecen", 12, 6, 12, 0);
     Utvonal utvonal1;
     utvonal1.addAllomas(allomas1);
     utvonal1.addAllomas(allomas2);

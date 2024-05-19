@@ -43,19 +43,26 @@ void Utvonal::addAllomas(Allomas allomas)
   allomasok = temp;
 };
 
-void Utvonal::createAllomas(std::string nev,  int indulas_ora, int indulas_perc, int erkezes_ora, int erkezes_perc) {
+void Utvonal::createAllomas(std::string nev, int erkezes_ora, int erkezes_perc, int indulas_ora, int indulas_perc) {
   Allomas *temp = new Allomas[allomasok_szama + 1];
   for (size_t i = 0; i < allomasok_szama; ++i) {
     temp[i] = allomasok[i];
   }
+  try
+  {
+    temp[allomasok_szama] = Allomas(allomasok_szama, nev, erkezes_ora, erkezes_perc, indulas_ora, indulas_perc);
+    allomasok_szama++;
 
-  temp[allomasok_szama] = Allomas(allomasok_szama, nev, indulas_ora, indulas_perc, erkezes_ora, erkezes_perc);
-  allomasok_szama++;
-
-  if (allomasok != nullptr) {
-    delete[] allomasok;
+    if (allomasok != nullptr) {
+      delete[] allomasok;
+    }
+    allomasok = temp;
   }
-  allomasok = temp;
+  catch(const char *err)
+  {
+    delete[] temp;
+    throw err;
+  }
 }
 
 void Utvonal::changeAllomas(size_t index, Allomas allomas)

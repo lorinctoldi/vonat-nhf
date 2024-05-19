@@ -165,9 +165,9 @@ int Vonat::indulasiIdoKulonbseg(std::string nev, int ora, int perc)
   Allomas m = utvonal.getAllomas(allomas_index);
   int i = m.getIndulasOra() * 60 + m.getIndulasPerc();
   int p = ora * 60 + perc;
-  if (i < p)
+  if (p > i)
     return -1;
-  return p - i;
+  return i - p;
 }
 
 bool Vonat::routeExists(std::string indulo, std::string erkezo) const
@@ -188,6 +188,7 @@ size_t Vonat::createJegy(std::string indulo, std::string erkezo, int indulo_ora,
     return -1;
   }
 
+  
   size_t kocsi_azonosito = -1;
   size_t hely_szam = -1;
   for (size_t i = 0; i < kocsik_szama; ++i)
@@ -200,12 +201,7 @@ size_t Vonat::createJegy(std::string indulo, std::string erkezo, int indulo_ora,
     }
   }
 
-  if (kocsi_azonosito == -1 || hely_szam == -1)
-  {
-    std::cout << "tele";
-    throw "Nincs hely a vonaton";
-    return -1;
-  }
+  if(hely_szam == -1) throw "Egy kocsiban sincsen szabad ulohely.";
 
   size_t induloIndex = findAllomas(indulo);
   size_t erkezoIndex = findAllomas(erkezo);
@@ -248,7 +244,8 @@ void Vonat::createKocsi(size_t szekek)
   for (size_t i = 0; i < kocsik_szama; i++)
     temp[i] = kocsik[i];
   temp[kocsik_szama] = Kocsi(kocsik_szama, szekek);
-  delete[] kocsik;
+  if(kocsik_szama > 0)
+    delete[] kocsik;
   kocsik = temp;
   kocsik_szama++;
 }
@@ -261,6 +258,10 @@ size_t Vonat::getAzonosito() const
 Utvonal Vonat::getUtvonal() const
 {
   return utvonal;
+}
+
+void Vonat::setAzonosito(size_t azonosito) {
+  vonat_azonosito = azonosito;
 }
 
 void Vonat::setUtvonal(const Utvonal &utv)

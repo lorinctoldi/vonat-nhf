@@ -1,6 +1,6 @@
 ===== Menetrend =====
 Vonatok szama:
-1
+2
 ===== Vonat =====
 vonat azonosito:
 0
@@ -138,3 +138,107 @@ erkezes:
 15 29
 indulas:
 15 32
+===== Vonat =====
+vonat azonosito:
+1
+kocsik szama:
+8
+===== Kocsi =====
+kocsi azonosito:
+0
+szekek szama:
+30
+foglalt szekek szama:
+0
+===== Kocsi =====
+kocsi azonosito:
+1
+szekek szama:
+10
+foglalt szekek szama:
+0
+===== Kocsi =====
+kocsi azonosito:
+2
+szekek szama:
+30
+foglalt szekek szama:
+0
+===== Kocsi =====
+kocsi azonosito:
+3
+szekek szama:
+30
+foglalt szekek szama:
+0
+===== Kocsi =====
+kocsi azonosito:
+4
+szekek szama:
+30
+foglalt szekek szama:
+0
+===== Kocsi =====
+kocsi azonosito:
+5
+szekek szama:
+30
+foglalt szekek szama:
+0
+===== Kocsi =====
+kocsi azonosito:
+6
+szekek szama:
+40
+foglalt szekek szama:
+0
+===== Kocsi =====
+kocsi azonosito:
+7
+szekek szama:
+20
+foglalt szekek szama:
+0
+jegyek szama:
+0
+===== Utvonal =====
+utvonal azonosito:
+0
+allomasok szama:
+4
+===== Allomas =====
+allomas azonosito:
+0
+nev:
+Chengdu
+erkezes:
+13 32
+indulas:
+13 34
+===== Allomas =====
+allomas azonosito:
+1
+nev:
+Wuhan
+erkezes:
+15 2
+indulas:
+15 10
+===== Allomas =====
+allomas azonosito:
+2
+nev:
+Shenzen
+erkezes:
+21 12
+indulas:
+21 28
+===== Allomas =====
+allomas azonosito:
+3
+nev:
+Beihai
+erkezes:
+23 52
+indulas:
+23 58

@@ -11,6 +11,7 @@ Menetrend::Menetrend(Vonat v)
 
 void Menetrend::addVonat(Vonat v)
 {
+  v.setAzonosito(vonatok_szama);
   vonatok_szama += 1;
   Vonat *temp_vonatok = new Vonat[vonatok_szama];
 
@@ -62,6 +63,7 @@ void Menetrend::removeVonat(size_t index) {
 }
 
 void Menetrend::createJegy(std::string indulo, std::string erkezo, int indulo_ora, int indulo_perc, double discountOrFee, const std::string &tipus) {
+  if(vonatok_szama == 0) throw "Nincsenek vonatok a rendszerben.";
   size_t leghamarabb_indulo_vonat = -1;
   int min_ido = -1;
   for(size_t i = 0; i < vonatok_szama; ++i) {
@@ -83,11 +85,6 @@ void Menetrend::createJegy(std::string indulo, std::string erkezo, int indulo_or
   vonatok[leghamarabb_indulo_vonat].getJegy(jegy_index)->kiir(std::cout);
 }
 
-void Menetrend::createVonat() {
-  Vonat v;
-  addVonat(v);
-}
-
 void Menetrend::clear()
   {
     if (vonatok_szama > 0)
@@ -101,17 +98,20 @@ void Menetrend::clear()
 
 void Menetrend::kiir(std::ostream &os, std::string indulo = "", std::string erkezo = "") const
 {
+  os << "\nMenetrend:\n";
+  bool talalt = false;
   for (size_t i = 0; i < vonatok_szama; ++i)
   {
     size_t induloIndex = vonatok[i].findAllomas(indulo);
     size_t erkezoIndex = vonatok[i].findAllomas(erkezo);
     if(!vonatok[i].routeExists(indulo, erkezo) && induloIndex == -1 && erkezoIndex == -1 && (!indulo.empty() && !erkezo.empty())) continue;
 
+    talalt = true;
     Utvonal u = vonatok[i].getUtvonal();
 
     if ((indulo.empty() || (induloIndex != -1)) && (erkezo.empty() || (erkezoIndex != -1)))
     {
-      os << "Vonat " << vonatok[i].getAzonosito() << " :\n";
+      os << "Vonat " << vonatok[i].getAzonosito()+1 << " :\n";
 
       if ((induloIndex != -1) && (erkezoIndex != -1) && induloIndex < erkezoIndex)
       {
@@ -178,6 +178,7 @@ void Menetrend::kiir(std::ostream &os, std::string indulo = "", std::string erke
       }
     }
   }
+  if(!talalt) os << "A megadott allomasok kozott vonat nem kozlekedik.\n";
 }
 
 void Menetrend::write(std::ostream &os) const
