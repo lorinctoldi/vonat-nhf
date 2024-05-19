@@ -1,5 +1,4 @@
 #include "ido.h"
-#include <iomanip>
 
 Ido::Ido() : ora(0), perc(0) {}
 

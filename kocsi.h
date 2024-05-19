@@ -18,7 +18,7 @@ public:
   // Az osztaly alapertelmezett konstruktora.
   Kocsi();
 
-  // Az osztaly masoloi konstruktora.
+  // Az osztaly masolo konstruktora.
   // @param other - masolni kivant Kocsi objektum
   Kocsi(const Kocsi &other);
 
