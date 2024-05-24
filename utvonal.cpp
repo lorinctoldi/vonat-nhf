@@ -9,43 +9,42 @@ Utvonal::Utvonal(const Utvonal &other) : utvonal_azonosito(other.utvonal_azonosi
     allomasok[i] = other.allomasok[i];
 }
 
-Utvonal& Utvonal::operator=(const Utvonal &other)
+Utvonal &Utvonal::operator=(const Utvonal &other)
 {
-    if (this == &other)
-        return *this;
-
-
-    delete[] allomasok;
-
-
-    utvonal_azonosito = other.utvonal_azonosito;
-    allomasok_szama = other.allomasok_szama;
-    allomasok = new Allomas[allomasok_szama];
-    for (int i = 0; i < allomasok_szama; ++i)
-        allomasok[i] = other.allomasok[i];
-
+  if (this == &other)
     return *this;
+
+  delete[] allomasok;
+
+  utvonal_azonosito = other.utvonal_azonosito;
+  allomasok_szama = other.allomasok_szama;
+  allomasok = new Allomas[allomasok_szama];
+  for (int i = 0; i < allomasok_szama; ++i)
+    allomasok[i] = other.allomasok[i];
+
+  return *this;
 }
 
 void Utvonal::addAllomas(Allomas allomas)
 {
   Allomas *temp = new Allomas[allomasok_szama + 1];
-  for (int i = 0; i < allomasok_szama; ++i) {
+  for (int i = 0; i < allomasok_szama; ++i)
+  {
     temp[i] = allomasok[i];
   }
 
   temp[allomasok_szama] = allomas;
   allomasok_szama++;
 
-  if (allomasok != nullptr) {
-    delete[] allomasok;
-  }
+  delete[] allomasok;
   allomasok = temp;
 };
 
-void Utvonal::createAllomas(std::string nev, int erkezes_ora, int erkezes_perc, int indulas_ora, int indulas_perc) {
+void Utvonal::createAllomas(const char *nev, int erkezes_ora, int erkezes_perc, int indulas_ora, int indulas_perc)
+{
   Allomas *temp = new Allomas[allomasok_szama + 1];
-  for (int i = 0; i < allomasok_szama; ++i) {
+  for (int i = 0; i < allomasok_szama; ++i)
+  {
     temp[i] = allomasok[i];
   }
   try
@@ -53,12 +52,13 @@ void Utvonal::createAllomas(std::string nev, int erkezes_ora, int erkezes_perc, 
     temp[allomasok_szama] = Allomas(allomasok_szama, nev, erkezes_ora, erkezes_perc, indulas_ora, indulas_perc);
     allomasok_szama++;
 
-    if (allomasok != nullptr) {
+    if (allomasok != nullptr)
+    {
       delete[] allomasok;
     }
     allomasok = temp;
   }
-  catch(const char *err)
+  catch (const char *err)
   {
     delete[] temp;
     throw err;
@@ -87,54 +87,60 @@ void Utvonal::removeAllomas(int index)
   }
 }
 
-int Utvonal::getAllomasokSzama() const {
+int Utvonal::getAllomasokSzama() const
+{
   return allomasok_szama;
 }
 
-Allomas& Utvonal::getAllomas(int i) const {
+Allomas &Utvonal::getAllomas(int i) const
+{
   return allomasok[i];
 }
 
-void Utvonal::kiir(std::ostream &os) const {
-  for(int i = 0; i < allomasok_szama; ++i) {
+void Utvonal::kiir(std::ostream &os) const
+{
+  for (int i = 0; i < allomasok_szama; ++i)
+  {
     os << "\t" << allomasok[i].getNev() << " : ";
     allomasok[i].getIndulas().kiir(os);
-    if(i != allomasok_szama-1) os << "\t|\n";
+    if (i != allomasok_szama - 1)
+      os << "\t|\n";
   }
 }
 
 void Utvonal::write(std::ostream &os) const
+{
+  os << "===== Utvonal =====\n";
+  os << "utvonal azonosito:\n";
+  os << utvonal_azonosito << '\n';
+  os << "allomasok szama:\n";
+  os << allomasok_szama << '\n';
+  for (int i = 0; i < allomasok_szama; ++i)
   {
-    os << "===== Utvonal =====\n";
-    os << "utvonal azonosito:\n";
-    os << utvonal_azonosito << '\n';
-    os << "allomasok szama:\n";
-    os << allomasok_szama << '\n';
-    for (int i = 0; i < allomasok_szama; ++i)
-    {
-      allomasok[i].write(os);
-    }
+    allomasok[i].write(os);
   }
+}
 
-  void Utvonal::read(std::istream &is)
+void Utvonal::read(std::istream &is)
+{
+  std::string header;
+  std::getline(is, header);
+  std::getline(is, header);
+  is >> utvonal_azonosito;
+  is.ignore();
+  std::getline(is, header);
+  is >> allomasok_szama;
+  is.ignore();
+
+  allomasok = new Allomas[allomasok_szama];
+  for (int i = 0; i < allomasok_szama; ++i)
   {
-    std::string header;
-    std::getline(is, header);
-    std::getline(is, header);
-    is >> utvonal_azonosito;
-    is.ignore();
-    std::getline(is, header);
-    is >> allomasok_szama;
-    is.ignore();
-    
-
-    allomasok = new Allomas[allomasok_szama];
-    for (int i = 0; i < allomasok_szama; ++i)
-    {
-      allomasok[i].read(is);
-    }
+    allomasok[i].read(is);
   }
+}
 
-Utvonal::~Utvonal() {
-  if(allomasok != nullptr) delete[] allomasok;
+Utvonal::~Utvonal()
+{
+  if (allomasok != nullptr)
+    delete[] allomasok;
 }

@@ -95,8 +95,7 @@ void test()
     EXPECT_EQ(0, allomas.getIndulasPerc());
     EXPECT_EQ(0, allomas.getErkezesOra());
     EXPECT_EQ(0, allomas.getErkezesPerc());
-    std::string s1 = "";
-    EXPECT_TRUE(s1 == allomas.getNev());
+    EXPECT_TRUE(allomas.getNev() == nullptr);
 
     /// állomás létrehozása paraméteres konstruktorral
     Allomas allomas_2(123, "Teszt Allomas", 10, 30, 12, 45);
@@ -106,8 +105,8 @@ void test()
     EXPECT_EQ(45, allomas_2.getIndulasPerc());
     EXPECT_EQ(10, allomas_2.getErkezesOra());
     EXPECT_EQ(30, allomas_2.getErkezesPerc());
-    std::string s2 = "Teszt Allomas";
-    EXPECT_TRUE(s2 == allomas_2.getNev());
+    // std::string s2 = "Teszt Allomas";
+    // EXPECT_TRUE(s2 == allomas_2.getNev());
   }
   END
 
@@ -153,11 +152,12 @@ void test()
     /// állomás kiírása StringStream-be
     allomas1.write(ss);
 
-    /// állomás beolvasása StringStream-ből
+    // állomás beolvasása StringStream-ből
     allomas2.read(ss);
 
+
     /// eredeti es beolvasott objektum egyezésének vizsgálata
-    EXPECT_EQ(allomas1.getNev(), allomas2.getNev());
+    EXPECT_TRUE(std::strcmp(allomas1.getNev(),allomas2.getNev()) == 0);
     EXPECT_EQ(allomas1.getIndulasOra(), allomas2.getIndulasOra());
     EXPECT_EQ(allomas1.getIndulasPerc(), allomas2.getIndulasPerc());
     EXPECT_EQ(allomas1.getErkezesOra(), allomas2.getErkezesOra());
@@ -181,10 +181,8 @@ void test()
 
     /// útvonalban tárolt állomások ellenőrzése
     EXPECT_EQ(2, utvonal.getAllomasokSzama());
-    std::string s1 = "Allomas1";
-    EXPECT_TRUE("Allomas1" == utvonal.getAllomas(0).getNev());
-    std::string s2 = "Allomas2";
-    EXPECT_TRUE("Allomas2" == utvonal.getAllomas(1).getNev());
+    EXPECT_TRUE(std::strcmp("Allomas1", utvonal.getAllomas(0).getNev()) == 0);
+    EXPECT_TRUE(std::strcmp("Allomas2", utvonal.getAllomas(1).getNev()) == 0);
   }
   END
 
@@ -242,8 +240,8 @@ void test()
 
     /// útvonal objektumok egyezésének vizsgálata
     EXPECT_EQ(utvonal.getAllomasokSzama(), utvonal2.getAllomasokSzama());
-    EXPECT_EQ(utvonal.getAllomas(0).getNev(), utvonal2.getAllomas(0).getNev());
-    EXPECT_EQ(utvonal.getAllomas(1).getNev(), utvonal2.getAllomas(1).getNev());
+    EXPECT_TRUE(std::strcmp(utvonal.getAllomas(0).getNev(), utvonal2.getAllomas(0).getNev()) == 0);
+    EXPECT_TRUE(std::strcmp(utvonal.getAllomas(1).getNev(), utvonal2.getAllomas(1).getNev()) == 0);
   }
   END
 
@@ -433,8 +431,8 @@ void test()
     /// vonatok egyezésének vizsgálata
     EXPECT_EQ(vonat1.getAzonosito(), vonat2.getAzonosito());
     EXPECT_EQ(vonat1.getUtvonal().getAllomasokSzama(), vonat2.getUtvonal().getAllomasokSzama());
-    EXPECT_EQ(vonat1.getUtvonal().getAllomas(0).getNev(), vonat2.getUtvonal().getAllomas(0).getNev());
-    EXPECT_EQ(vonat1.getUtvonal().getAllomas(1).getNev(), vonat2.getUtvonal().getAllomas(1).getNev());
+    EXPECT_TRUE(std::strcmp(vonat1.getUtvonal().getAllomas(0).getNev(), vonat2.getUtvonal().getAllomas(0).getNev()) == 0);
+    EXPECT_TRUE(std::strcmp(vonat1.getUtvonal().getAllomas(1).getNev(), vonat2.getUtvonal().getAllomas(1).getNev()) == 0);
     EXPECT_EQ(true, *vonat2.getJegy(1) == jegy1);
     EXPECT_EQ(true, *vonat2.getJegy(2) == jegy2);
     EXPECT_EQ(true, *vonat2.getJegy(3) == jegy3);

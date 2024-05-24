@@ -34,7 +34,8 @@ int main()
         int valasztas;
         std::cin >> valasztas;
 
-        if (std::cin.eof()) break;
+        if (std::cin.eof())
+            break;
 
         if (std::cin.fail())
         {
@@ -144,12 +145,15 @@ int main()
 
                 for (int i = 0; i < allomasokSzama; ++i)
                 {
-                    std::string allomasNev;
+                    const char *allomasNev;
                     int indulasOra, indulasPerc, erkezesOra, erkezesPerc;
 
                     std::cout << "  Allomas " << (i + 1) << " neve: ";
                     std::cin.ignore();
-                    std::getline(std::cin, allomasNev);
+                    
+                    char buffer[256];
+                    std::cin.getline(buffer, 256);
+                    allomasNev = buffer;
 
                     std::cout << "  Vonat erkezesenek ideje " << (i + 1) << " az allomasra (ora perc): ";
                     std::cin >> erkezesOra >> erkezesPerc;

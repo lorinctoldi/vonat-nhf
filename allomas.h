@@ -17,7 +17,7 @@
 class Allomas : public Serializable
 {
   int allomas_azonosito; /// Az állomás azonosítója.
-  std::string nev;          /// Az állomás neve.
+  char* nev;          /// Az állomás neve.
   Ido indulas;              /// Az indulási időpont tárolója.
   Ido erkezes;              /// Az érkezési időpont tárolója.
 public:
@@ -38,7 +38,7 @@ public:
   /// @param erkezes_perc - Az érkezés perce.
   /// @param indulas_ora - Az indulás órája.
   /// @param indulas_perc - Az indulás perce.
-  Allomas(int azonosito, const std::string &nev, int erkezes_ora, int erkezes_perc, int indulas_ora, int indulas_perc);
+  Allomas(int azonosito, const char* nev, int erkezes_ora, int erkezes_perc, int indulas_ora, int indulas_perc);
 
   /// Az érkezés idejének módosítása.
   /// @param ora - Az új érkezés órája.
@@ -52,7 +52,7 @@ public:
 
   /// Az állomás nevének módosítása.
   /// @param other - Az új név.
-  void changeNev(const std::string &other);
+  void changeNev(const char* other);
 
   /// Az indulás órájának lekérdezése.
   /// @return Az indulás órája.
@@ -80,7 +80,7 @@ public:
 
   /// Az állomás névének lekérdezése.
   /// @return Az állomás neve.
-  std::string &getNev();
+  const char *getNev() const;
 
   /// Serializable interfész implementációja: objektum írása adatfolyamba.
   /// @param os - Az írásra használt kimeneti adatfolyam.

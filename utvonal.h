@@ -34,7 +34,7 @@ public:
   /// @param erkezes_perc - az állomásra érkező vonat perc
   /// @param indulas_óra - az állomásról induló vonat óra
   /// @param indulas_perc - az állomásról induló vonat perc
-  void createAllomas(std::string nev, int erkezes_ora, int erkezes_perc, int indulas_ora, int indulas_perc);
+  void createAllomas(const char* nev, int erkezes_ora, int erkezes_perc, int indulas_ora, int indulas_perc);
 
   /// Az útvonal értékadás operátora.
   /// @param other - másolni kívánt Utvonal objektum
