@@ -12,12 +12,7 @@ Vonat::Vonat(const Vonat &other)
 
   jegyek = new Jegy *[jegyek_szama];
   for (int i = 0; i < jegyek_szama; ++i)
-    if (dynamic_cast<KedvezmenyesJegy *>(other.jegyek[i]))
-      jegyek[i] = new KedvezmenyesJegy(*dynamic_cast<KedvezmenyesJegy *>(other.jegyek[i]));
-    else if (dynamic_cast<FelarasJegy *>(other.jegyek[i]))
-      jegyek[i] = new FelarasJegy(*dynamic_cast<FelarasJegy *>(other.jegyek[i]));
-    else
-      jegyek[i] = new Jegy(*other.jegyek[i]);
+      jegyek[i] = other.jegyek[i]->clone();
 }
 
 Vonat &Vonat::operator=(const Vonat &other)
@@ -45,19 +40,14 @@ Vonat &Vonat::operator=(const Vonat &other)
   return *this;
 }
 
-Vonat::Vonat(int azonosito, int kocsik_sz, Kocsi kocsik_tomb[], Utvonal utv, int jegyek_sz, Jegy **jegyek_ptr)
+Vonat::Vonat(int azonosito, int kocsik_sz, Kocsi kocsik_tomb[], Utvonal utv, int jegyek_sz, Jegy **jegyek_tomb)
     : vonat_azonosito(azonosito), kocsik_szama(kocsik_sz), jegyek_szama(jegyek_sz), kocsik(new Kocsi[kocsik_sz]), jegyek(new Jegy *[jegyek_sz]), utvonal(utv)
 {
   for (int i = 0; i < kocsik_sz; ++i)
     kocsik[i] = kocsik_tomb[i];
 
   for (int i = 0; i < jegyek_sz; ++i)
-    if (dynamic_cast<KedvezmenyesJegy *>(jegyek_ptr[i]))
-      jegyek[i] = new KedvezmenyesJegy(*dynamic_cast<KedvezmenyesJegy *>(jegyek_ptr[i]));
-    else if (dynamic_cast<FelarasJegy *>(jegyek_ptr[i]))
-      jegyek[i] = new FelarasJegy(*dynamic_cast<FelarasJegy *>(jegyek_ptr[i]));
-    else
-      jegyek[i] = new Jegy(*jegyek_ptr[i]);
+    jegyek[i] = jegyek_tomb[i]->clone();
 }
 
 void Vonat::addJegy(Jegy &jegy)
