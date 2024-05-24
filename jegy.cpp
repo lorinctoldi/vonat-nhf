@@ -9,21 +9,39 @@ int Jegy::getAr(double pred = 1)
 
 Jegy::Jegy()
     : jegy_azonosito(0), helyszam(0), kocsi_szam(0), vonat_szam(0),
-      indulo_nev(""), indulo_ido(), cel_nev(""), cel_ido(), ar(0) {}
+      indulo_nev(nullptr), indulo_ido(), cel_nev(nullptr), cel_ido(), ar(0) {}
 
-Jegy::Jegy(int azonosito, int hely, int kocsi, int vonat, const std::string &indulo, Ido indulo_idopont,
-           const std::string &cel, Ido cel_idopont)
+Jegy::Jegy(int azonosito, int hely, int kocsi, int vonat, const char * indulo, Ido indulo_idopont,
+           const char * cel, Ido cel_idopont)
     : jegy_azonosito(azonosito), helyszam(hely), kocsi_szam(kocsi), vonat_szam(vonat),
-      indulo_nev(indulo), indulo_ido(indulo_idopont), cel_nev(cel), cel_ido(cel_idopont), ar(getAr()) {}
+      indulo_nev(nullptr), indulo_ido(indulo_idopont), cel_nev(nullptr), cel_ido(cel_idopont), ar(getAr())
+{
+  indulo_nev = new char[strlen(indulo) + 1];
+  std::strcpy(indulo_nev, indulo);
+  cel_nev = new char[strlen(cel) + 1];
+  std::strcpy(cel_nev, cel);
+}
 
-Jegy::Jegy(int azonosito, int hely, int kocsi, int vonat, const std::string &indulo, Ido indulo_idopont,
-           const std::string &cel, Ido cel_idopont, double pred)
+Jegy::Jegy(int azonosito, int hely, int kocsi, int vonat, const char * indulo, Ido indulo_idopont,
+           const char * cel, Ido cel_idopont, double pred)
     : jegy_azonosito(azonosito), helyszam(hely), kocsi_szam(kocsi), vonat_szam(vonat),
-      indulo_nev(indulo), indulo_ido(indulo_idopont), cel_nev(cel), cel_ido(cel_idopont), ar(getAr(pred)) {}
+      indulo_nev(nullptr), indulo_ido(indulo_idopont), cel_nev(nullptr), cel_ido(cel_idopont), ar(getAr(pred))
+{
+  indulo_nev = new char[strlen(indulo) + 1];
+  std::strcpy(indulo_nev, indulo);
+  cel_nev = new char[strlen(cel) + 1];
+  std::strcpy(cel_nev, cel);
+}
 
 Jegy::Jegy(const Jegy &other)
     : jegy_azonosito(other.jegy_azonosito), helyszam(other.helyszam), kocsi_szam(other.kocsi_szam), vonat_szam(other.vonat_szam),
-      indulo_nev(other.indulo_nev), indulo_ido(other.indulo_ido), cel_nev(other.cel_nev), cel_ido(other.cel_ido), ar(other.ar) {}
+      indulo_nev(nullptr), indulo_ido(other.indulo_ido), cel_nev(nullptr), cel_ido(other.cel_ido), ar(other.ar)
+{
+  indulo_nev = new char[strlen(other.indulo_nev) + 1];
+  std::strcpy(indulo_nev, other.indulo_nev);
+  cel_nev = new char[strlen(other.cel_nev) + 1];
+  std::strcpy(cel_nev, other.cel_nev);
+}
 
 Jegy &Jegy::operator=(const Jegy &other)
 {
@@ -33,11 +51,17 @@ Jegy &Jegy::operator=(const Jegy &other)
     helyszam = other.helyszam;
     kocsi_szam = other.kocsi_szam;
     vonat_szam = other.vonat_szam;
-    indulo_nev = other.indulo_nev;
     indulo_ido = other.indulo_ido;
-    cel_nev = other.cel_nev;
     cel_ido = other.cel_ido;
     ar = other.ar;
+
+    delete[] indulo_nev;
+    indulo_nev = new char[strlen(other.indulo_nev) + 1];
+    strcpy(indulo_nev, other.indulo_nev);
+    
+    delete[] cel_nev;
+    cel_nev = new char[strlen(other.cel_nev) + 1];
+    strcpy(cel_nev, other.cel_nev); 
   }
   return *this;
 }
@@ -49,9 +73,9 @@ bool Jegy::operator==(const Jegy &other) const
       helyszam == other.helyszam &&
       kocsi_szam == other.kocsi_szam &&
       vonat_szam == other.vonat_szam &&
-      indulo_nev == other.indulo_nev &&
+      strcmp(indulo_nev, other.indulo_nev) == 0 &&
       indulo_ido == other.indulo_ido &&
-      cel_nev == other.cel_nev &&
+      strcmp(cel_nev, other.cel_nev) == 0 &&
       cel_ido == other.cel_ido &&
       ar == other.ar);
 }
@@ -102,6 +126,7 @@ void Jegy::write(std::ostream &os) const
 
 void Jegy::read(std::istream &is)
 {
+  char buffer[256];
   std::string header;
   std::getline(is, header);
   if (header == "JEGY")
@@ -119,10 +144,18 @@ void Jegy::read(std::istream &is)
   is >> vonat_szam;
   is.ignore();
   std::getline(is, header);
-  std::getline(is, indulo_nev);
+
+  is.getline(buffer, 256);
+  indulo_nev = new char[strlen(buffer) + 1];
+  std::strcpy(indulo_nev, buffer);
+
   indulo_ido.read(is);
   std::getline(is, header);
-  std::getline(is, cel_nev);
+
+  is.getline(buffer, 256);
+  cel_nev = new char[strlen(buffer) + 1];
+  std::strcpy(cel_nev, buffer);
+
   cel_ido.read(is);
   std::getline(is, header);
   is >> ar;
@@ -134,21 +167,30 @@ Jegy *Jegy::clone() const
   return new Jegy(*this);
 }
 
+Jegy::~Jegy()
+{
+  delete[] indulo_nev;
+  delete[] cel_nev;
+};
+
 // KEDVEZMENYES JEGY
 
 KedvezmenyesJegy::KedvezmenyesJegy() : Jegy()
 {
-  tipus = "kedvezmenyes jegy";
 }
 
-KedvezmenyesJegy::KedvezmenyesJegy(int azonosito, int hely, int kocsi, int vonat, const std::string &indulo, Ido indulo_idopont,
-                                   const std::string &cel, Ido cel_idopont, double kedvezmeny = -0.6, std::string tipus = "kedvezmenyes jegy")
-    : Jegy(azonosito, hely, kocsi, vonat, indulo, indulo_idopont, cel, cel_idopont, kedvezmeny), tipus(tipus), kedvezmeny(kedvezmeny)
+KedvezmenyesJegy::KedvezmenyesJegy(int azonosito, int hely, int kocsi, int vonat, const char * indulo, Ido indulo_idopont,
+                                   const char * cel, Ido cel_idopont, double kedvezmeny = -0.6, const char *tipus = "kedvezmenyes jegy")
+    : Jegy(azonosito, hely, kocsi, vonat, indulo, indulo_idopont, cel, cel_idopont, kedvezmeny), kedvezmeny(kedvezmeny)
 {
+  this->tipus = new char[strlen(tipus) + 1];
+  std::strcpy(this->tipus, tipus);
 }
 
-KedvezmenyesJegy::KedvezmenyesJegy(const KedvezmenyesJegy &other) : Jegy(other), tipus(other.tipus), kedvezmeny(other.kedvezmeny)
+KedvezmenyesJegy::KedvezmenyesJegy(const KedvezmenyesJegy &other) : Jegy(other), kedvezmeny(other.kedvezmeny)
 {
+  tipus = new char[strlen(other.tipus) + 1];
+  std::strcpy(tipus, other.tipus);
 }
 
 KedvezmenyesJegy &KedvezmenyesJegy::operator=(const KedvezmenyesJegy &other)
@@ -157,7 +199,10 @@ KedvezmenyesJegy &KedvezmenyesJegy::operator=(const KedvezmenyesJegy &other)
   {
     Jegy::operator=(other);
 
-    tipus = other.tipus;
+    delete[] tipus;
+    tipus = new char[strlen(other.tipus) + 1];
+    std::strcpy(tipus, other.tipus);
+
     kedvezmeny = other.kedvezmeny;
   }
   return *this;
@@ -180,12 +225,17 @@ void KedvezmenyesJegy::write(std::ostream &os) const
 
 void KedvezmenyesJegy::read(std::istream &is)
 {
+  char buffer[256];
   std::string header;
   std::getline(is, header);
   if (header == "KEDVEZMENYES")
     std::getline(is, header);
   Jegy::read(is);
-  std::getline(is, tipus);
+
+  is.getline(buffer, 256);
+  tipus = new char[strlen(buffer) + 1];
+  std::strcpy(tipus, buffer);
+
   is >> kedvezmeny;
   is.ignore();
 }
@@ -197,23 +247,27 @@ Jegy *KedvezmenyesJegy::clone() const
 
 KedvezmenyesJegy::~KedvezmenyesJegy()
 {
+  delete[] tipus;
 }
 
 // FELARAS JEGY
 
 FelarasJegy::FelarasJegy() : Jegy()
 {
-  tipus = "felaras jegy";
 }
 
-FelarasJegy::FelarasJegy(int azonosito, int hely, int kocsi, int vonat, const std::string &indulo, Ido indulo_idopont,
-                         const std::string &cel, Ido cel_idopont, double felar = 0.6, std::string tipus = "felaras jegy")
-    : Jegy(azonosito, hely, kocsi, vonat, indulo, indulo_idopont, cel, cel_idopont, felar), tipus(tipus), felar(felar)
+FelarasJegy::FelarasJegy(int azonosito, int hely, int kocsi, int vonat, const char * indulo, Ido indulo_idopont,
+                         const char * cel, Ido cel_idopont, double felar = 0.6, const char *tipus = "felaras jegy")
+    : Jegy(azonosito, hely, kocsi, vonat, indulo, indulo_idopont, cel, cel_idopont, felar), felar(felar)
 {
+  this->tipus = new char[strlen(tipus) + 1];
+  std::strcpy(this->tipus, tipus);
 }
 
-FelarasJegy::FelarasJegy(const FelarasJegy &other) : Jegy(other), tipus(other.tipus), felar(other.felar)
+FelarasJegy::FelarasJegy(const FelarasJegy &other) : Jegy(other), felar(other.felar)
 {
+  tipus = new char[strlen(other.tipus) + 1];
+  std::strcpy(tipus, other.tipus);
 }
 
 FelarasJegy &FelarasJegy::operator=(const FelarasJegy &other)
@@ -222,7 +276,10 @@ FelarasJegy &FelarasJegy::operator=(const FelarasJegy &other)
   {
     Jegy::operator=(other);
 
-    tipus = other.tipus;
+    delete[] tipus;
+    tipus = new char[strlen(other.tipus) + 1];
+    std::strcpy(tipus, other.tipus);
+
     felar = other.felar;
   }
   return *this;
@@ -245,12 +302,17 @@ void FelarasJegy::write(std::ostream &os) const
 
 void FelarasJegy::read(std::istream &is)
 {
+  char buffer[256];
   std::string header;
   std::getline(is, header);
   if (header == "FELARAS")
     std::getline(is, header);
   Jegy::read(is);
-  std::getline(is, tipus);
+
+  is.getline(buffer, 256);
+  tipus = new char[strlen(buffer) + 1];
+  std::strcpy(tipus, buffer);
+
   is >> felar;
   is.ignore();
 }
@@ -262,4 +324,5 @@ Jegy *FelarasJegy::clone() const
 
 FelarasJegy::~FelarasJegy()
 {
+  delete[] tipus;
 }

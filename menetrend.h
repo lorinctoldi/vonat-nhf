@@ -64,7 +64,7 @@ public:
   /// @param indulo_perc - Az indulási idő perce.
   /// @param discountOrFee - Kedvezmény vagy felár értéke.
   /// @param tipus - A jegy típusa.
-  void createJegy(std::string indulo, std::string erkezo, int indulo_ora, int indulo_perc, double discountOrFee = 0, const std::string &tipus = "");
+  void createJegy(const char* indulo, const char* erkezo, int indulo_ora, int indulo_perc, double discountOrFee = 0, const char* tipus = "");
 
   /// Menetrendben tárolt adatok törlése.
   void clear();
@@ -77,7 +77,7 @@ public:
   /// @param os - Az írásra használt kimeneti adatfolyam.
   /// @param indulo - Az induló állomás neve.
   /// @param erkezo - Az érkező állomás neve.
-  void kiir(std::ostream &os, std::string indulo, std::string erkezo) const;
+  void kiir(std::ostream &os, const char* indulo, const char* erkezo) const;
 
   /// Serializable interfész implementációja: objektum írása adatfolyamba.
   /// @param os - Az írásra használt kimeneti adatfolyam.

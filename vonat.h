@@ -81,12 +81,12 @@ public:
     /// @param indulo - Az indulási állomás neve.
     /// @param erkezo - Az érkezési állomás neve.
     /// @return igaz, ha létezik útvonal, különben hamis.
-    bool routeExists(std::string indulo, std::string erkezo) const;
+    bool routeExists(const char* indulo, const char* erkezo) const;
 
     /// Megkeresi az állomás indexét az állomás neve alapján.
     /// @param nev - Az állomás neve, aminek az indexét keresi.
     /// @return Az állomás indexe, vagy -1, ha nem található az állomás.
-    int findAllomas(std::string nev) const;
+    int findAllomas(const char* nev) const;
 
     /// Meghatározza, hogy hány perc különbség van a megadott időpont és a vonat indulásának időpontja között.
     /// @param nev - Az állomás neve, ahonnan az indulási időt számítja.
@@ -94,7 +94,7 @@ public:
     /// @param perc - Az indulási idő perce.
     /// @return Perc különbség van a megadott időpont és a vonat indulásának időpontja között
     ///         vagy -1, ha az állomás nem található vagy a vonat hamarabb indul mint a megadott időpont.
-    int indulasiIdoKulonbseg(std::string nev, int ora, int perc);
+    int indulasiIdoKulonbseg(const char* nev, int ora, int perc) const;
 
     /// Új jegy létrehozása az adott indulási és érkezési állomások között.
     /// @param indulo - Az indulási állomás neve.
@@ -104,7 +104,7 @@ public:
     /// @param discountOrFee - Kedvezmény vagy felár mértéke (alapértelmezett érték: 0).
     /// @param tipus - Jegy típusa (alapértelmezett érték: üres string).
     /// @return Az újonnan létrehozott jegy azonosítója.
-    int createJegy(std::string indulo, std::string erkezo, int indulo_ora = 0, int indulo_perc = 0, double discountOrFee = 0, const std::string &tipus = "");
+    int createJegy(const char* indulo, const char* erkezo, int indulo_ora = 0, int indulo_perc = 0, double discountOrFee = 0, const char* tipus = "");
 
     /// Serializable interfész implementációja: objektum írása adatfolyamba.
     /// @param os - Az írásra használt kimeneti adatfolyam.

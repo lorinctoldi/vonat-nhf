@@ -68,7 +68,7 @@ void Menetrend::removeVonat(int index)
   vonatok = temp_vonatok;
 }
 
-void Menetrend::createJegy(std::string indulo, std::string erkezo, int indulo_ora, int indulo_perc, double discountOrFee, const std::string &tipus)
+void Menetrend::createJegy(const char* indulo, const char* erkezo, int indulo_ora, int indulo_perc, double discountOrFee, const char* tipus)
 {
   if (vonatok_szama == 0)
     throw "Nincsenek vonatok a rendszerben.";
@@ -107,7 +107,7 @@ void Menetrend::clear()
   }
 }
 
-void Menetrend::kiir(std::ostream &os, std::string indulo = "", std::string erkezo = "") const
+void Menetrend::kiir(std::ostream &os, const char* indulo = "", const char* erkezo = "") const
 {
   os << "\nMenetrend:\n";
   bool talalt = false;
@@ -115,13 +115,13 @@ void Menetrend::kiir(std::ostream &os, std::string indulo = "", std::string erke
   {
     int induloIndex = vonatok[i].findAllomas(indulo);
     int erkezoIndex = vonatok[i].findAllomas(erkezo);
-    if (!vonatok[i].routeExists(indulo, erkezo) && induloIndex == -1 && erkezoIndex == -1 && (!indulo.empty() && !erkezo.empty()))
+    if (!vonatok[i].routeExists(indulo, erkezo) && induloIndex == -1 && erkezoIndex == -1 && (!(std::strcmp(indulo, "") == 0) && !(std::strcmp(erkezo, "") == 0)))
       continue;
 
     talalt = true;
     Utvonal u = vonatok[i].getUtvonal();
 
-    if ((indulo.empty() || (induloIndex != -1)) && (erkezo.empty() || (erkezoIndex != -1)))
+    if ((std::strcmp(indulo, "") == 0 || (induloIndex != -1)) && (std::strcmp(erkezo, "") == 0 || (erkezoIndex != -1)))
     {
       os << "Vonat " << vonatok[i].getAzonosito() + 1 << " :\n";
 

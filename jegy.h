@@ -25,9 +25,9 @@ protected:
   int helyszam;                   /// A jegyhez tartozó helyszám.
   int kocsi_szam;                 /// A kocsi azonositója, ahol a hely található.
   int vonat_szam;                 /// A vonat azonosítója, amelyre a jegy szól.
-  std::string indulo_nev;         /// Az indulási állomas neve.
+  char* indulo_nev;         /// Az indulási állomas neve.
   Ido indulo_ido;                 /// Az indulási időpont.
-  std::string cel_nev;            /// A célállomás neve.
+  char* cel_nev;            /// A célállomás neve.
   Ido cel_ido;                    /// A célállomás időpontja.
   int ar;                         /// A jegy ára.
   virtual int getAr(double pred); /// A jegy árát számíto függvény.
@@ -42,8 +42,8 @@ public:
   /// @param vonat - a vonat azonosítója
   /// @param indulo - az indulási állomás
   /// @param cel - a célállomás
-  Jegy(int azonosito, int hely, int kocsi, int vonat, const std::string &indulo, Ido indulo_idopont,
-       const std::string &cel, Ido cel_idopont);
+  Jegy(int azonosito, int hely, int kocsi, int vonat, const char* indulo, Ido indulo_idopont,
+       const char* cel, Ido cel_idopont);
 
   /// Paraméteres konstruktor (alosztályhoz).
   /// @param azonosito - a jegy azonosítója
@@ -53,8 +53,8 @@ public:
   /// @param indulo - az indulási állomás
   /// @param cel - a célállomás
   /// @param pred - az árat meghatározó kedvezmény vagy felár értéke
-  Jegy(int azonosito, int hely, int kocsi, int vonat, const std::string &indulo, Ido indulo_idopont,
-       const std::string &cel, Ido cel_idopont, double pred);
+  Jegy(int azonosito, int hely, int kocsi, int vonat, const char* indulo, Ido indulo_idopont,
+       const char* cel, Ido cel_idopont, double pred);
 
   /// Az osztály másoló konstruktora.
   /// @param other - Másolni kívánt Jegy objektum.
@@ -77,29 +77,29 @@ public:
 
   /// Objektum kiírása adatfolyamba esztétikus formában.
   /// @param os - Az írásra használt kimeneti adatfolyam.
-  void kiir(std::ostream &os) const;
+  virtual void kiir(std::ostream &os) const;
 
   /// Serializable interfész implementációja: objektum írása adatfolyamba.
   /// @param os - Az írásra használt kimeneti adatfolyam.
-  void write(std::ostream &os) const;
+  virtual void write(std::ostream &os) const;
 
   /// Serializable interfész implementációja: objektum olvasása adatfolyamból.
   /// @param is - A beolvasásra használt bemeneti adatfolyam.
-  void read(std::istream &is);
+  virtual void read(std::istream &is);
 
   /// Létrehoz egy új Jegy objektum másolatot az aktuális objektumról.
   /// @return Jegy objektumra mutató pointer, amely az új másolatot tartalmazza.
   virtual Jegy *clone() const;
 
   /// Az osztály virtuális destruktora.
-  virtual ~Jegy() {}
+  virtual ~Jegy();
 };
 
 /// A KedvezményesJegy osztály a Jegy osztály leszármazottja, és reprezentálja a kedvezményes jegyeket.
 /// Tartalmazza a típust (pl. diák, nyugdíjas) és a kedvezmény mértékét.
 class KedvezmenyesJegy : public Jegy
 {
-  std::string tipus; /// A kedvezményes típus neve.
+  char* tipus; /// A kedvezményes típus neve.
   double kedvezmeny; /// A kedvezmény mértékét százalékban kifejező érték.
 public:
   /// Az osztály alapértelmezett konstruktora.
@@ -118,8 +118,8 @@ public:
   /// @param cel - a célállomás
   /// @param kedvezmeny - a kedvezmény mértékét kifejező érték
   /// @param tipus_nev - a kedvezményes típus neve
-  KedvezmenyesJegy(int azonosito, int hely, int kocsi, int vonat, const std::string &indulo, Ido indulo_idopont,
-                   const std::string &cel, Ido cel_idopont, double kedvezmeny, std::string tipus);
+  KedvezmenyesJegy(int azonosito, int hely, int kocsi, int vonat, const char* indulo, Ido indulo_idopont,
+                   const char* cel, Ido cel_idopont, double kedvezmeny, const char* tipus);
 
   /// Értékadó operátor.
   /// @param other - másolni kívánt KedvezmenyesJegy objektum
@@ -128,29 +128,29 @@ public:
 
   /// Objektum kiírása adatfolyamba esztétikus formában.
   /// @param os - Az írásra használt kimeneti adatfolyam.
-  void kiir(std::ostream &os) const;
+  void kiir(std::ostream &os) const override;
 
   /// Serializable interfész implementációja: objektum írása adatfolyamba.
   /// @param os - Az írásra használt kimeneti adatfolyam.
-  void write(std::ostream &os) const;
+  void write(std::ostream &os) const override;
 
   /// Serializable interfész implementációja: objektum olvasása adatfolyamból.
   /// @param is - A beolvasásra használt bemeneti adatfolyam.
-  void read(std::istream &is);
+  void read(std::istream &is) override;
 
   /// Létrehoz egy új Jegy objektum másolatot az aktuális objektumról.
   /// @return Jegy objektumra mutató pointer, amely az új másolatot tartalmazza.
-  Jegy *clone() const;
+  Jegy *clone() const override;
 
   /// Az osztály destruktora.
-  ~KedvezmenyesJegy();
+  ~KedvezmenyesJegy() override;
 };
 
 /// A FélárasJegy osztály a Jegy osztály leszármazottja, és reprezentálja a féláras jegyeket.
 /// Tartalmazza a típust és a felárat.
 class FelarasJegy : public Jegy
 {
-  std::string tipus; /// A féláras típus neve.
+  char* tipus;       /// A féláras típus neve.
   double felar;      /// A felár értéket.
 public:
   /// Az osztály alapértelmezett konstruktora.
@@ -169,8 +169,8 @@ public:
   /// @param cel - a célállomás
   /// @param felar - a felár értéket
   /// @param tipus_nev - a féláras típus neve
-  FelarasJegy(int azonosito, int hely, int kocsi, int vonat, const std::string &indulo, Ido indulo_idopont,
-              const std::string &cel, Ido cel_idopont, double felar, std::string tipus);
+  FelarasJegy(int azonosito, int hely, int kocsi, int vonat, const char* indulo, Ido indulo_idopont,
+              const char* cel, Ido cel_idopont, double felar, const char* tipus);
 
   /// Értékadó operátor.
   /// @param other - másolni kívánt FélárasJegy objektum
@@ -179,22 +179,22 @@ public:
 
   /// Objektum kiírása adatfolyamba esztétikus formában.
   /// @param os - Az írásra használt kimeneti adatfolyam.
-  void kiir(std::ostream &os) const;
+  void kiir(std::ostream &os) const override;
 
   /// Serializable interfész implementációja: objektum írása adatfolyamba.
   /// @param os - Az írásra használt kimeneti adatfolyam.
-  void write(std::ostream &os) const;
+  void write(std::ostream &os) const override;
 
   /// Serializable interfész implementációja: objektum olvasása adatfolyamból.
   /// @param is - A beolvasásra használt bemeneti adatfolyam.
-  void read(std::istream &is);
+  void read(std::istream &is) override;
 
   /// Létrehoz egy új Jegy objektum másolatot az aktuális objektumról.
   /// @return Jegy objektumra mutató pointer, amely az új másolatot tartalmazza.
-  Jegy *clone() const;
+  Jegy *clone() const override;
 
   /// Az osztály destruktora.
-  ~FelarasJegy();
+  ~FelarasJegy() override;
 };
 
 #endif /// JEGY_H

@@ -19,6 +19,10 @@ int main()
     Menetrend m;
     bool kilepes = false;
 
+    char *indulo = new char[256];
+    char *erkezo = new char[256];
+    char *tipus = new char[256];
+
     while (!kilepes)
     {
         std::cout << "Menupontok:\n"
@@ -48,26 +52,27 @@ int main()
         switch (valasztas)
         {
         case 1:
-            std::cout << "Jegykiadas menupont kivalasztva.\n";
             try
             {
-                std::string indulo, erkezo;
+                std::cout << "Jegykiadas menupont kivalasztva.\n";
+
                 int ora, perc;
-                std::string tipus;
                 double discountOrFee;
 
                 std::cout << "Kerem adja meg az indulo allomas nevet: ";
                 std::cin.ignore();
-                std::getline(std::cin, indulo);
+                std::cin.getline(indulo, 256);
 
                 std::cout << "Kerem adja meg az erkezo allomas nevet: ";
-                std::getline(std::cin, erkezo);
+                std::cin.getline(erkezo, 256);
 
                 std::cout << "Kerem adja meg az indulasi idopontjat (ora perc): ";
                 std::cin >> ora >> perc;
 
                 if (std::cin.fail())
+                {
                     throw "Ervenytelen bemenet. Kerem adjon meg ervenyes ora es perc ertekeket.";
+                }
 
                 char valasztas;
                 std::cout << "Elso osztalyú jegy? (I/N): ";
@@ -80,7 +85,7 @@ int main()
 
                     std::cout << "Kerem adja meg a jegy típusanak nevet (opcionalis): ";
                     std::cin.ignore();
-                    std::getline(std::cin, tipus);
+                    std::cin.getline(tipus, 256);
                 }
 
                 if (std::toupper(valasztas) != 'I')
@@ -94,10 +99,9 @@ int main()
                         std::cin.ignore();
 
                         std::cout << "Kerem adja meg a jegy típusanak nevet (opcionalis): ";
-                        std::getline(std::cin, tipus);
+                        std::cin.getline(tipus, 256);
                     }
                 }
-
                 if (std::toupper(valasztas) == 'I')
                     m.createJegy(indulo, erkezo, ora, perc, discountOrFee, tipus);
                 else
@@ -150,7 +154,7 @@ int main()
 
                     std::cout << "  Allomas " << (i + 1) << " neve: ";
                     std::cin.ignore();
-                    
+
                     char buffer[256];
                     std::cin.getline(buffer, 256);
                     allomasNev = buffer;
@@ -256,16 +260,20 @@ int main()
             {
                 if (m.getVonatokSzama() == 0)
                     throw "Nincsenek vonatok a rendszerben.\n";
-                std::string indulo, erkezo;
+                char *indulo = new char[256];
+                char *erkezo = new char[256];
 
                 std::cout << "Kerjuk adja meg az indulasi allomast (uresen hagyva az osszeset megjeleniti): ";
                 std::cin.ignore();
-                std::getline(std::cin, indulo);
+                std::cin.getline(indulo, 256);
 
                 std::cout << "Kerjuk adja meg az erkezesi allomast (uresen hagyva az osszeset megjeleniti): ";
-                std::getline(std::cin, erkezo);
+                std::cin.getline(erkezo, 256);
 
                 m.kiir(std::cout, indulo, erkezo);
+
+                delete[] indulo;
+                delete[] erkezo;
             }
             catch (const char *err)
             {
@@ -281,6 +289,10 @@ int main()
             break;
         }
     }
+
+    delete[] indulo;
+    delete[] erkezo;
+    delete[] tipus;
 
     return 0;
 }

@@ -12,7 +12,7 @@ Vonat::Vonat(const Vonat &other)
 
   jegyek = new Jegy *[jegyek_szama];
   for (int i = 0; i < jegyek_szama; ++i)
-      jegyek[i] = other.jegyek[i]->clone();
+    jegyek[i] = other.jegyek[i]->clone();
 }
 
 Vonat &Vonat::operator=(const Vonat &other)
@@ -73,16 +73,16 @@ Jegy *Vonat::getJegy(int index) const
     throw std::out_of_range("Nincs ilyen jegy a rendszerben.");
 }
 
-int Vonat::findAllomas(std::string nev) const
+int Vonat::findAllomas(const char *nev) const
 {
   for (int i = 0; i < utvonal.getAllomasokSzama(); ++i)
-    if (utvonal.getAllomas(i).getNev() == nev)
+    if (std::strcmp(utvonal.getAllomas(i).getNev(), nev) == 0)
       return i;
 
   return -1;
 }
 
-int Vonat::indulasiIdoKulonbseg(std::string nev, int ora, int perc)
+int Vonat::indulasiIdoKulonbseg(const char *nev, int ora, int perc) const
 {
   int allomas_index = findAllomas(nev);
   if (allomas_index == -1)
@@ -95,7 +95,7 @@ int Vonat::indulasiIdoKulonbseg(std::string nev, int ora, int perc)
   return i - p;
 }
 
-bool Vonat::routeExists(std::string indulo, std::string erkezo) const
+bool Vonat::routeExists(const char *indulo, const char *erkezo) const
 {
   int induloIndex = findAllomas(indulo);
   int erkezoIndex = findAllomas(erkezo);
@@ -105,7 +105,7 @@ bool Vonat::routeExists(std::string indulo, std::string erkezo) const
   return true;
 }
 
-int Vonat::createJegy(std::string indulo, std::string erkezo, int indulo_ora, int indulo_perc, double discountOrFee, const std::string &tipus)
+int Vonat::createJegy(const char *indulo, const char *erkezo, int indulo_ora, int indulo_perc, double discountOrFee, const char *tipus)
 {
   if (!routeExists(indulo, erkezo))
   {
@@ -131,18 +131,21 @@ int Vonat::createJegy(std::string indulo, std::string erkezo, int indulo_ora, in
   Ido indulas = utvonal.getAllomas(induloIndex).getIndulas();
   Ido erkezes = utvonal.getAllomas(erkezoIndex).getErkezes();
 
-  if (discountOrFee > 0) {
-    Jegy* temp = new FelarasJegy(jegyek_szama + 1, hely_szam + 1, kocsi_azonosito, vonat_azonosito, indulo, indulas, erkezo, erkezes, discountOrFee, tipus);
+  if (discountOrFee > 0)
+  {
+    Jegy *temp = new FelarasJegy(jegyek_szama + 1, hely_szam + 1, kocsi_azonosito, vonat_azonosito, indulo, indulas, erkezo, erkezes, discountOrFee, tipus);
     addJegy(*temp);
     delete temp;
   }
-  else if (discountOrFee < 0) {
-    Jegy* temp = new KedvezmenyesJegy(jegyek_szama + 1, hely_szam + 1, kocsi_azonosito, vonat_azonosito, indulo, indulas, erkezo, erkezes, discountOrFee, tipus);
+  else if (discountOrFee < 0)
+  {
+    Jegy *temp = new KedvezmenyesJegy(jegyek_szama + 1, hely_szam + 1, kocsi_azonosito, vonat_azonosito, indulo, indulas, erkezo, erkezes, discountOrFee, tipus);
     addJegy(*temp);
     delete temp;
   }
-  else {
-    Jegy* temp = new Jegy(jegyek_szama + 1, hely_szam + 1, kocsi_azonosito, vonat_azonosito, indulo, indulas, erkezo, erkezes);
+  else
+  {
+    Jegy *temp = new Jegy(jegyek_szama + 1, hely_szam + 1, kocsi_azonosito, vonat_azonosito, indulo, indulas, erkezo, erkezes);
     addJegy(*temp);
     delete temp;
   }
