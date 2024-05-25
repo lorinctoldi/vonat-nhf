@@ -105,8 +105,7 @@ void test()
     EXPECT_EQ(45, allomas_2.getIndulasPerc());
     EXPECT_EQ(10, allomas_2.getErkezesOra());
     EXPECT_EQ(30, allomas_2.getErkezesPerc());
-    // std::string s2 = "Teszt Allomas";
-    // EXPECT_TRUE(s2 == allomas_2.getNev());
+    EXPECT_TRUE(std::strcmp("Teszt Allomas", allomas_2.getNev()) == 0);
   }
   END
 
@@ -133,8 +132,7 @@ void test()
     allomas_2.changeNev("Uj Teszt Allomas");
 
     /// nev paraméter állításának ellenőrzése
-    std::string s = "Uj Teszt Allomas";
-    EXPECT_TRUE(s == allomas_2.getNev());
+    EXPECT_TRUE(std::strcmp("Uj Teszt Allomas", allomas_2.getNev()) == 0);
   }
   END
 
@@ -152,9 +150,8 @@ void test()
     /// állomás kiírása StringStream-be
     allomas1.write(ss);
 
-    // állomás beolvasása StringStream-ből
+    /// állomás beolvasása StringStream-ből
     allomas2.read(ss);
-
 
     /// eredeti es beolvasott objektum egyezésének vizsgálata
     EXPECT_TRUE(std::strcmp(allomas1.getNev(),allomas2.getNev()) == 0);
@@ -206,10 +203,8 @@ void test()
 
     /// útvonalban tárolt állomások vizsgálata a csere után
     EXPECT_EQ(2, utvonal.getAllomasokSzama());
-    std::string s1 = "Allomas1";
-    EXPECT_TRUE(s1 == utvonal.getAllomas(0).getNev());
-    std::string s2 = "Allomas3";
-    EXPECT_TRUE(s2 == utvonal.getAllomas(1).getNev());
+    EXPECT_TRUE(std::strcmp("Allomas1", utvonal.getAllomas(0).getNev()) == 0);
+    EXPECT_TRUE(std::strcmp("Allomas3", utvonal.getAllomas(1).getNev()) == 0);
   }
   END
 
@@ -329,10 +324,8 @@ void test()
 
     /// eredeti es beolvasott objektum egyezésének vizsgálata
     EXPECT_EQ(2, kapott_utvonal.getAllomasokSzama());
-    std::string s1 = "Budapest";
-    EXPECT_TRUE(s1 == kapott_utvonal.getAllomas(0).getNev());
-    std::string s2 = "Debrecen";
-    EXPECT_TRUE(s2 == kapott_utvonal.getAllomas(1).getNev());
+    EXPECT_TRUE(std::strcmp("Budapest", kapott_utvonal.getAllomas(0).getNev()) == 0);
+    EXPECT_TRUE(std::strcmp("Debrecen", kapott_utvonal.getAllomas(1).getNev()) == 0);
   }
   END
 
